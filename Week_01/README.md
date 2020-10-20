@@ -1,6 +1,6 @@
 # Week01 作业题目
 
-### 10月15日周四：
+## 10月15日周四：
 
 1. 选做，自己写一个简单的 Hello.java，里面需要涉及基本类型，四则运行，if 和 for，然后自己分析一下对应的字节码，有问题群里讨论。
 - https://github.com/gerrypang/JAVA-000/blob/main/Week_01/src/com/gerry/pang/bytecode/hello.class.md
@@ -15,5 +15,5 @@
 
 注意：如果没有线上系统，可以自己 run 一个 web/java 项目。
 
-### 10月17日周六：
+## 10月17日周六：
 1. 选做，本机使用G1 GC启动一个程序，仿照课上案例分析一下JVM情况
