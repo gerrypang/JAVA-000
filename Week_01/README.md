@@ -1,6 +1,6 @@
 # Week01 作业题目
 
-## 10月15日周四：
+## 2020年10月15日周四：
 
 1. 选做，自己写一个简单的 Hello.java，里面需要涉及基本类型，四则运行，if 和 for，然后自己分析一下对应的字节码，有问题群里讨论。
 - https://github.com/gerrypang/JAVA-000/blob/main/Week_01/src/com/gerry/pang/bytecode/hello.class.md
@@ -12,8 +12,7 @@
 ![](https://github.com/gerrypang/JAVA-000/blob/main/Week_01/jvm.png)
 
 4. ️选做，检查一下自己维护的业务系统的 JVM 参数配置，用 jstat 和 jstack、jmap 查看一下详情，并且自己独立分析一下大概情况，思考有没有不合理的地方，如何改进。
-
 注意：如果没有线上系统，可以自己 run 一个 web/java 项目。
 
-## 10月17日周六：
+## 2020年10月17日周六：
 1. 选做，本机使用G1 GC启动一个程序，仿照课上案例分析一下JVM情况
