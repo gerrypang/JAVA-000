@@ -22,7 +22,7 @@ public class HttpClientRestOpreation implements RestOperation {
 
 	@Override
 	public void doGet(String url, Map<String, String> headerVariables, Map<String, String> urlVariables) {
-		// 如果请求带有参数配置参数
+		// 配置请求参数
 		String requstPathParam = this.setRequstPathParam(urlVariables);
 		url = url + "?" + requstPathParam;
 		// 创建 HttpGet 请求
@@ -30,8 +30,8 @@ public class HttpClientRestOpreation implements RestOperation {
 		// 配置请求头
 		this.setHeader(httpGet, headerVariables);
 		try (
-				// 请求并获得响应结果
-				CloseableHttpResponse httpResponse = getHttpClient().execute(httpGet);) {
+			// 请求并获得响应结果
+			CloseableHttpResponse httpResponse = getHttpClient().execute(httpGet);) {
 			HttpEntity httpEntity = httpResponse.getEntity();
 			// 输出请求结果
 			 System.out.println("===> " + EntityUtils.toString(httpEntity));
