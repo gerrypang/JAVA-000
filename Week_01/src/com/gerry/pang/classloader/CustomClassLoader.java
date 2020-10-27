@@ -6,14 +6,14 @@ import java.io.InputStream;
 import java.lang.reflect.Method;
 
 /**
- * <p>×Ô¶¨ÒåClassLoader</p>
+ * <p>è‡ªå®šä¹‰ClassLoader</p>
  * 
- * Week01-ÌâÄ¿2£º<br/>
- * ×Ô¶¨ÒåÒ»¸ö Classloader£¬¼ÓÔØÒ»¸ö Hello.xlass ÎÄ¼ş£¬Ö´ĞĞ hello ·½·¨£¬ ´ËÎÄ¼şÄÚÈİÊÇÒ»¸ö Hello.class
- * ÎÄ¼şËùÓĞ×Ö½Ú£¨x=255-x£©´¦ÀíºóµÄÎÄ¼ş¡£ÎÄ¼şÈºÀïÌá¹©¡£
+ * Week01-é¢˜ç›®2ï¼š<br/>
+ * è‡ªå®šä¹‰ä¸€ä¸ª Classloaderï¼ŒåŠ è½½ä¸€ä¸ª Hello.xlass æ–‡ä»¶ï¼Œæ‰§è¡Œ hello æ–¹æ³•ï¼Œ æ­¤æ–‡ä»¶å†…å®¹æ˜¯ä¸€ä¸ª Hello.class
+ * æ–‡ä»¶æ‰€æœ‰å­—èŠ‚ï¼ˆx=255-xï¼‰å¤„ç†åçš„æ–‡ä»¶ã€‚æ–‡ä»¶ç¾¤é‡Œæä¾›ã€‚
  * 
  * @author pangguowei
- * @since 2020Äê10ÔÂ19ÈÕ ÏÂÎç4:40:59
+ * @since 2020å¹´10æœˆ19æ—¥ ä¸‹åˆ4:40:59
  */
 public class CustomClassLoader extends ClassLoader {
 
@@ -23,17 +23,18 @@ public class CustomClassLoader extends ClassLoader {
 		if (name == null || name.trim().length() == 0) {
 			throw new IllegalArgumentException("name is null");
 		}
-		try (InputStream resourceAsStream = getClass().getResourceAsStream(name)) {
+		try (InputStream resourceAsStream = getClass().getResourceAsStream(name);
+				ByteArrayOutputStream outStream = new ByteArrayOutputStream();) {
 			if (resourceAsStream == null) {
 				/*
-				 * ×¢Òâ£ºÕâÀï²»ÄÜÅ×³öÒì³£ throw new ClassNotFoundException(name + " file not found");
-				 * ÒòÎª¼ÓÔØHello.xlassÊ±»á´¥·¢Æä°üº¬ObjectÀà¼ÓÔØ£¬µ±Ç°ÀàµÄSystem¡¢PrintStreamÀà¼ÓÔØ
-				 * µ±Ç°classloader´¦Àí²»ÁË£¬Òª±£Ö¤ÕâĞ©ÀàÎ¯ÍĞ¸ø¸¸Àà¼ÓÔØÆ÷
+				 * æ³¨æ„ï¼šè¿™é‡Œä¸èƒ½æŠ›å‡ºå¼‚å¸¸ throw new ClassNotFoundException(name + " file not found");
+				 * å› ä¸ºåŠ è½½Hello.xlassæ—¶ä¼šè§¦å‘å…¶åŒ…å«Objectç±»åŠ è½½ï¼Œå½“å‰ç±»çš„Systemã€PrintStreamç±»åŠ è½½
+				 * å½“å‰classloaderå¤„ç†ä¸äº†ï¼Œè¦ä¿è¯è¿™äº›ç±»å§”æ‰˜ç»™çˆ¶ç±»åŠ è½½å™¨
 				 */
 				return super.loadClass(name);
 			}
 			int data = 0;
-			ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+			// ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 			while ((data = resourceAsStream.read()) != -1) {
 				outStream.write(255 - data);
 			}
@@ -52,7 +53,7 @@ public class CustomClassLoader extends ClassLoader {
 		System.out.println("===============");
 		hello.invoke(aClass.newInstance());
 		/**
-		 * ÔËĞĞ½á¹û£º
+		 * è¿è¡Œç»“æœï¼š
 		 * ==> class name:Hello.xlass
 		 * ==> class name:java.lang.Object
 		 * ===============
