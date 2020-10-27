@@ -51,8 +51,7 @@ public class HttpClientRestOpreation implements RestOperation {
 	}
 
 	/**
-	 * 设置请求头
-	 *
+	 * 设置请求头	 *
 	 * @param httpGet
 	 * @param headerVariables
 	 * @author pangguowei
