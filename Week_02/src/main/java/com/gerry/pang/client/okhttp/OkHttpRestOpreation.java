@@ -1,11 +1,7 @@
 package com.gerry.pang.client.okhttp;
 
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
-
-import org.apache.http.client.methods.HttpGet;
 
 import com.gerry.pang.client.AbstractRestOperation;
 
@@ -27,7 +23,7 @@ public class OkHttpRestOpreation extends AbstractRestOperation {
 	private OkHttpClient client;
 	
 	@Override
-	public void getCreateClient() {
+	public void createClient() {
 		client = new OkHttpClient();
 	}
 
@@ -38,16 +34,17 @@ public class OkHttpRestOpreation extends AbstractRestOperation {
 
 	@Override
 	public void doGet(String url, Map<String, String> headerVariables, Map<String, String> urlVariables) {
+		this.createClient();
 		// 配置请求参数
 		String requstPathParam = this.setRequstPathParam(urlVariables);
-		url = url + "?" + requstPathParam;
-		// 配置请求头
-//		this.setHeader("", headerVariables);
-		//创建一个Request
-        Request request = new Request.Builder().get()
-//        		.headers(headers)
+		url += requstPathParam;
+		// 创建一个Request
+		Request request = new Request.Builder().get()
+				// 配置header
+				.headers(this.setHeader(headerVariables))
         		.url(url).build();
-        //通过client发起请求
+		 
+        // 通过client发起请求
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -63,7 +60,6 @@ public class OkHttpRestOpreation extends AbstractRestOperation {
         });
 	}
 	
-	
 	/**
 	 * 设置请求头	
 	 * 
@@ -72,9 +68,11 @@ public class OkHttpRestOpreation extends AbstractRestOperation {
 	 * @author pangguowei
 	 * @since 2020年10月27日  
 	 */
-	private void setHeader(Headers headers, Map<String, String> headerVariables) {
+	private Headers setHeader(Map<String, String> headerVariables) {
+		Headers headerbuild = new Headers.Builder().build();
 		if (headerVariables != null && headerVariables.size() > 0) {
-			headers = Headers.of(headerVariables);
+			headerbuild = Headers.of(headerVariables);
 		}
+		return headerbuild;
 	}
 }

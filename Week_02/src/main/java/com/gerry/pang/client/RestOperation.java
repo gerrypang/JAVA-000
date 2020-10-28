@@ -14,7 +14,7 @@ public interface RestOperation {
 	 *
 	 * @return
 	 */
-	public void getCreateClient();
+	public void createClient();
 	
 	/**
 	 * post 请求

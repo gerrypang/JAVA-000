@@ -11,8 +11,8 @@
 - 电脑配置：i7-7600U 2.80GHz，4盒，16G
 
 ## GCLogAnalysis 实验数据总结
-![gc-data-table.png](https://github.com/gerrypang/JAVA-000/blob/main/JAVA-000/Week_02/images/gc-data-table.png)
-![jvm-xmx-xms.png](https://github.com/gerrypang/JAVA-000/blob/main/JAVA-000/Week_02/images/jvm-xmx-xms.png)
+![gc-data-table.png](https://github.com/gerrypang/JAVA-000/blob/main/Week_02/images/gc-data-table.png)
+![jvm-xmx-xms.png](https://github.com/gerrypang/JAVA-000/blob/main/Week_02/images/jvm-xmx-xms.png)
 
 1. 此程序不管是用什么垃圾收集器，基本上128M情况都无法满足正常使用，都会导致内存溢出OOM问题
 2. 如果想要减少full gc问题，不管使用什么垃圾收集器，最大的对空间至少需要512M
@@ -45,7 +45,7 @@
 ``` shell
 2020-10-27T21:49:14.235+0800: [Full GC (Ergonomics) [PSYoungGen: 8526K->0K(29184K)] [ParOldGen: 72498K->73714K(87552K)] 81025K->73714K(116736K), [Metaspace: 2704K->2704K(1056768K)], 0.0221761 secs] [Times: user=0.03 sys=0.00, real=0.02 secs]
 ``` 
-![GC-log.png](https://github.com/gerrypang/JAVA-000/blob/main/JAVA-000/Week_02/images/GC-log.png)
+![GC-log.png](https://github.com/gerrypang/JAVA-000/blob/main/Week_02/images/GC-log.png)
 
 - “2020-10-27T21:49:14.235+0800:” 表示这次GC发时间
 - “[GC (xxxx)”和“[Full GC (xxxx)” 表示这次垃圾收集的停顿类型，小括号(xxxx)表示触发GC的原因

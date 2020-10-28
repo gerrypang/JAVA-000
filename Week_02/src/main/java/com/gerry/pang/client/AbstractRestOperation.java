@@ -23,6 +23,7 @@ public abstract class AbstractRestOperation implements RestOperation {
 		String removeLastChar = "";
 		if (urlVariables != null && urlVariables.size() > 0) {
 			StringBuilder pathParam = new StringBuilder(32);
+			pathParam.append("?");
 			Iterator<Entry<String, String>> iter = urlVariables.entrySet().iterator();
 			while (iter.hasNext()) {
 				Entry<String, String> entry = iter.next();

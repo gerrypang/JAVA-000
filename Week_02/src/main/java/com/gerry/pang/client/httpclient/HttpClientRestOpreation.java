@@ -30,9 +30,11 @@ public class HttpClientRestOpreation extends AbstractRestOperation {
 
 	@Override
 	public void doGet(String url, Map<String, String> headerVariables, Map<String, String> urlVariables) {
+		//
+		this.createClient();
 		// 配置请求参数
 		String requstPathParam = this.setRequstPathParam(urlVariables);
-		url = url + "?" + requstPathParam;
+		url += requstPathParam;
 		// 创建 HttpGet 请求
 		HttpGet httpGet = new HttpGet(url);
 		// 配置请求头
@@ -56,7 +58,7 @@ public class HttpClientRestOpreation extends AbstractRestOperation {
 	 * @since 2020年10月27日  
 	 */
 	@Override
-	public void getCreateClient() {
+	public void createClient() {
 		client = HttpClients.createDefault();
 	}
 
