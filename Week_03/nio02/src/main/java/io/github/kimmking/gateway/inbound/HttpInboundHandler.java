@@ -1,22 +1,29 @@
 package io.github.kimmking.gateway.inbound;
 
+import java.time.LocalDateTime;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import io.github.kimmking.gateway.filter.CustomHttpRequestFIlter;
+import io.github.kimmking.gateway.filter.HttpRequestFilter;
 import io.github.kimmking.gateway.outbound.httpclient4.HttpOutboundHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.util.ReferenceCountUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class HttpInboundHandler extends ChannelInboundHandlerAdapter {
 
     private static Logger logger = LoggerFactory.getLogger(HttpInboundHandler.class);
     private final String proxyServer;
     private HttpOutboundHandler handler;
+    private HttpRequestFilter filer;
     
     public HttpInboundHandler(String proxyServer) {
         this.proxyServer = proxyServer;
         handler = new HttpOutboundHandler(this.proxyServer);
+        filer = new CustomHttpRequestFIlter();
     }
     
     @Override
@@ -26,19 +33,18 @@ public class HttpInboundHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
+    	LocalDateTime startTime = LocalDateTime.now();
         try {
-            //logger.info("channelRead流量接口请求开始，时间为{}", startTime);
+            logger.info("channelRead流量接口请求开始，时间为{}", startTime);
             FullHttpRequest fullRequest = (FullHttpRequest) msg;
-//            String uri = fullRequest.uri();
-//            //logger.info("接收到的请求url为{}", uri);
-//            if (uri.contains("/test")) {
-//                handlerTest(fullRequest, ctx);
-//            }
-    
+            String uri = fullRequest.uri();
+            logger.info("接收到的请求url为{}", uri);
+            // 通过filter过滤器
+            filer.filter(fullRequest, ctx);
+            // 调用不同类型handler
             handler.handle(fullRequest, ctx);
-    
         } catch(Exception e) {
-            e.printStackTrace();
+        	logger.error("channelRead流量接口请求异常", e);
         } finally {
             ReferenceCountUtil.release(msg);
         }
