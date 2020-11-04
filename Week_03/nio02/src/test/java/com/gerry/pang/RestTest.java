@@ -2,9 +2,9 @@ package com.gerry.pang;
 
 import java.util.Collections;
 
-import io.github.kimmking.client.AbstractRestOperation;
-import io.github.kimmking.client.httpclient.HttpClientRestOpreation;
-import io.github.kimmking.client.okhttp.OkHttpRestOpreation;
+import io.github.kimmking.gateway.client.AbstractRestOperation;
+import io.github.kimmking.gateway.client.httpclient.HttpClientRestOpreation;
+import io.github.kimmking.gateway.client.okhttp.OkHttpRestOpreation;
 
 public class RestTest {
 	public static void main(String[] args) {
