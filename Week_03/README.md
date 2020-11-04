@@ -20,12 +20,18 @@
 2. （选做）实现路由。
 
 ## 作业实现
-- 作业主程序入口：https://github.com/gerrypang/JAVA-000/blob/main/Week_03/nio02/src/main/java/io/github/kimmking/gateway/NettyServerApplication.java
-- 实现简单随机router ：https://github.com/gerrypang/JAVA-000/blob/main/Week_03/nio02/src/main/java/io/github/kimmking/gateway/router
-- 实现filer：https://github.com/gerrypang/JAVA-000/tree/main/Week_03/nio02/src/main/java/io/github/kimmking/gateway/filter
+- 作业主程序入口：
+https://github.com/gerrypang/JAVA-000/blob/main/Week_03/nio02/src/main/java/io/github/kimmking/gateway/NettyServerApplication.java
 
-启动结果
-![result.png](https://github.com/gerrypang/JAVA-000/blob/main/Week_03/images/result.png)
+- 实现简单随机
+router ：https://github.com/gerrypang/JAVA-000/blob/main/Week_03/nio02/src/main/java/io/github/kimmking/gateway/router
+
+- 实现filer：
+https://github.com/gerrypang/JAVA-000/tree/main/Week_03/nio02/src/main/java/io/github/kimmking/gateway/filter
+
+- 启动结果
+
+![image](https://github.com/gerrypang/JAVA-000/blob/main/Week_03/images/result.png)
  
 ## 参考资料
 1. How It Works 2.0：https://github.com/Netflix/zuul/wiki/How-It-Works-2.0
