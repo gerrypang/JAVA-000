@@ -1,8 +1,8 @@
-package io.github.kimmking.client.netty;
+package io.github.kimmking.gateway.client.netty;
 
 import java.util.Map;
 
-import io.github.kimmking.client.AbstractRestOperation;
+import io.github.kimmking.gateway.client.AbstractRestOperation;
 
 /**
  * Netty 方式

@@ -1,4 +1,4 @@
-package io.github.kimmking.client;
+package io.github.kimmking.gateway.client;
 
 import java.util.Map;
 

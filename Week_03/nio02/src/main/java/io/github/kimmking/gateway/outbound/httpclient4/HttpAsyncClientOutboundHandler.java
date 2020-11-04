@@ -4,11 +4,7 @@ import static io.netty.handler.codec.http.HttpResponseStatus.NO_CONTENT;
 import static io.netty.handler.codec.http.HttpResponseStatus.OK;
 import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.RejectedExecutionHandler;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -21,6 +17,8 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.github.kimmking.gateway.outbound.HttpOutboundHandler;
+import io.github.kimmking.gateway.support.GatewagThreadPool;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
@@ -29,23 +27,18 @@ import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.FullHttpResponse;
 import io.netty.handler.codec.http.HttpUtil;
 
-public class HttpOutboundHandler {
+public class HttpAsyncClientOutboundHandler implements HttpOutboundHandler {
 	
-	private static Logger logger = LoggerFactory.getLogger(HttpOutboundHandler.class);
+	private static Logger logger = LoggerFactory.getLogger(HttpAsyncClientOutboundHandler.class);
     
     private CloseableHttpAsyncClient httpclient;
     private ExecutorService proxyService;
     private String backendUrl;
 
-	public HttpOutboundHandler(String backendUrl) {
-		this.backendUrl = backendUrl.endsWith("/") ? backendUrl.substring(0, backendUrl.length() - 1) : backendUrl;
+	public HttpAsyncClientOutboundHandler(String backendUrl) {
+		this.backendUrl = backendUrl;
         int cores = Runtime.getRuntime().availableProcessors() * 2;
-        long keepAliveTime = 1000;
-        int queueSize = 2048;
-        RejectedExecutionHandler handler = new ThreadPoolExecutor.CallerRunsPolicy();//.DiscardPolicy();
-        proxyService = new ThreadPoolExecutor(cores, cores,
-                keepAliveTime, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(queueSize),
-                new NamedThreadFactory("proxyService"), handler);
+        proxyService = GatewagThreadPool.getThreadPool();
         
         IOReactorConfig ioConfig = IOReactorConfig.custom()
                 .setConnectTimeout(1000)
@@ -62,8 +55,10 @@ public class HttpOutboundHandler {
         httpclient.start();
     }
     
+	@Override
     public void handle(final FullHttpRequest fullRequest, final ChannelHandlerContext ctx) {
-		final String url = this.backendUrl + fullRequest.uri();
+		String pathParams = backendUrl.contains("?") ? backendUrl.substring(backendUrl.indexOf("?"), backendUrl.length() - 1) : backendUrl;
+		final String url = pathParams != null && pathParams.length() > 0 ? fullRequest.uri() + "?" + pathParams : fullRequest.uri();
 		proxyService.submit(() -> fetchGet(fullRequest, ctx, url));
 	}
     
@@ -77,7 +72,7 @@ public class HttpOutboundHandler {
                 try {
                     handleResponse(inbound, ctx, endpointResponse);
                 } catch (Exception e) {
-                	logger.error("HttpOutboundHandler get method handleResponse excepiton:{}", e);
+                	logger.error("HttpOutboundHandler.fetchGet excepiton:{}", e);
                 } finally {
                     
                 }
@@ -99,27 +94,11 @@ public class HttpOutboundHandler {
     private void handleResponse(final FullHttpRequest fullRequest, final ChannelHandlerContext ctx, final HttpResponse endpointResponse) throws Exception {
         FullHttpResponse response = null;
         try {
-//            String value = "hello,kimmking";
-//            response = new DefaultFullHttpResponse(HTTP_1_1, OK, Unpooled.wrappedBuffer(value.getBytes("UTF-8")));
-//            response.headers().set("Content-Type", "application/json");
-//            response.headers().setInt("Content-Length", response.content().readableBytes());
-    
-    
             byte[] body = EntityUtils.toByteArray(endpointResponse.getEntity());
-//            System.out.println(new String(body));
-//            System.out.println(body.length);
-    
             response = new DefaultFullHttpResponse(HTTP_1_1, OK, Unpooled.wrappedBuffer(body));
             response.headers().set("Content-Type", "application/json");
             response.headers().setInt("Content-Length", Integer.parseInt(endpointResponse.getFirstHeader("Content-Length").getValue()));
-    
-//            for (Header e : endpointResponse.getAllHeaders()) {
-//                //response.headers().set(e.getName(),e.getValue());
-//                System.out.println(e.getName() + " => " + e.getValue());
-//            } 
-        
         } catch (Exception e) {
-            e.printStackTrace();
             response = new DefaultFullHttpResponse(HTTP_1_1, NO_CONTENT);
             exceptionCaught(ctx, e);
         } finally {
@@ -134,11 +113,10 @@ public class HttpOutboundHandler {
             ctx.flush();
             //ctx.close();
         }
-        
     }
     
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        cause.printStackTrace();
+        logger.error("处理相应发生异常", cause.getMessage());
         ctx.close();
     }
     

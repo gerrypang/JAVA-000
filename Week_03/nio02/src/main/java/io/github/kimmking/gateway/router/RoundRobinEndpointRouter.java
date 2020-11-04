@@ -12,7 +12,6 @@ public class RoundRobinEndpointRouter implements HttpEndpointRouter {
 
 	@Override
 	public String route(List<String> endpoints) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
