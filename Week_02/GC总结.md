@@ -23,7 +23,7 @@
 7. 有一个诡异的现象如果使用UseConcMarkSweepGC，到了1024M及之后无论怎么扩大初始化和最大堆空间，年轻代都只会分配306688K（300M）
 
 ## gateway-server 实验数据总结
-![gateway-data.png](https://github.com/gerrypang/JAVA-000/blob/main/Week_02/images/gateway-data.png)
+![gateway-data.jpg](https://github.com/gerrypang/JAVA-000/blob/main/Week_02/images/gateway-data.jpg)
 执行 `sb -u http://127.0.0.1:8088/api/hello -c 20 -N 60` 对四种主流不同的垃圾收集器进行压测。
 1. 从压测结果中我们可以看出，串行GC和并行在4G情况下，并没有明显的性能提升，反而下降了。
 2. 在所有种类的GC中，我们可以看串行出平均最大响应时间要明显比其他GC要低
