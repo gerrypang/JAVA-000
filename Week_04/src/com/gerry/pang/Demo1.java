@@ -6,6 +6,7 @@ import java.util.concurrent.FutureTask;
 
 /**
  * 方法1：使用Callable接口 + 单线程
+ * 执行结果截图：https://github.com/gerrypang/JAVA-000/blob/main/Week_04/images/Demo1.png
  * 
  * @author pangguowei
  * @since 2020年11月11日

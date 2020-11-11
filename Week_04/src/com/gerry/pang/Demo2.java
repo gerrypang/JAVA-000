@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 方法2：使用Callable接口 + 线程池
+ * 执行结果截图：https://github.com/gerrypang/JAVA-000/blob/main/Week_04/images/Demo2.png
  * 
  * @author pangguowei
  * @since 2020年11月11日

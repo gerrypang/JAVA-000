@@ -6,6 +6,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * 方法7：使用Runnable接口 + ReentrantLock
+ * 执行结果截图：https://github.com/gerrypang/JAVA-000/blob/main/Week_04/images/Demo7.png
  * 
  * @author pangguowei
  * @since 2020年11月11日
