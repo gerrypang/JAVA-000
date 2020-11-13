@@ -32,6 +32,32 @@ https://github.com/gerrypang/JAVA-000/tree/main/Week_03/nio02/src/main/java/io/g
 - 启动结果
 
 ![image](https://github.com/gerrypang/JAVA-000/blob/main/Week_03/images/result.png)
+
+
+## 调整题
+
+### 1. 侧重集合：
+1. 10-基于基本类型和数组，实现ArrayList/LinkedList，支持自动扩容和迭代器
+
+2. 20-基于基本类型和数组和List，HashMap/LinkedHashMap功能，处理hash冲突和扩容
+
+3. 30-考虑List和Map的并发安全问题，基于读写锁改进安全问题
+
+4. 30-考虑List和Map的并发安全问题，基于AQS改进安全问题
+
+5. 30-编写测试代码比较它们与java-util/JUC集合类的性能和并发安全性
+
+### 2. 侧重应用：
+1. 10-根据课程提供的场景，实现一个订单处理Service，模拟处理100万订单：后面提供模拟数据。
+
+2. 20-使用多线程方法优化订单处理，对比处理性能
+
+3. 30-使用并发工具和集合类改进订单Service，对比处理性能
+
+4. 30-使用分布式集群+分库分表方式处理拆分订单，对比处理性能：第6模块讲解分库分表。
+
+5. 30-使用读写分离和分布式缓存优化订单的读性能：第6、8模块讲解读写分离和缓存。
+
  
 ## 参考资料
 1. How It Works 2.0：https://github.com/Netflix/zuul/wiki/How-It-Works-2.0
