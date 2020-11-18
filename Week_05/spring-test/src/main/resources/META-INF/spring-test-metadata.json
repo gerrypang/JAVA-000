@@ -1,0 +1,49 @@
+{
+	"hints": [],
+	"groups": [
+		{
+			"sourceType": "com.gerry.pang.common.properties.StudentProperties",
+			"name": "spring.test",
+			"type": "com.gerry.pang.common.properties.StudentProperties"
+		}
+	],
+	"properties": [
+		{
+			"sourceType": "com.gerry.pang.common.properties.StudentProperties",
+			"defaultValue": false,
+			"name": "spring.test.enabled",
+			"description": "是否开启自定义stater",
+			"type": "java.lang.Boolean"
+		},
+		{
+			"name": "spring.test.student.id",
+			"type": "java.lang.String",
+			"defaultValue": "demo-id",
+			"description": "student 的 id 属性"
+		},
+		{
+			"name": "spring.test.student.name",
+			"type": "java.lang.String",
+			"defaultValue": "demo-name",
+			"description": "student 的 name 属性"
+		},
+		{
+			"name": "spring.test.student.age",
+			"type": "java.lang.Integer",
+			"defaultValue": 18,
+			"description": "student 的 age 属性"
+		},
+		{
+			"name": "spring.test.student.gender",
+			"type": "java.lang.String",
+			"defaultValue": "demo-gender",
+			"description": "student 的 gender 属性"
+		},
+		{
+			"name": "spring.test.student.address",
+			"type": "java.lang.String",
+			"defaultValue": "demo-address",
+			"description": "student 的 address 属性"
+		}
+	]
+}

@@ -1,0 +1,3 @@
+# myself boot stater configuration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.gerry.pang.config.MySpringTestAutoConfiguration
