@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+    
+	<!-- 使用设值注入方式装配Person实例 -->
+	<bean id="tom" class="com.gerry.pang.domain.Person">
+		<property name="name" value="tom" />
+		<property name="age" value="20" />
+		<property name="gender" value="male" />
+		<property name="address" value="Beijing" />
+	</bean>
+	
+	<!-- 使用构造方法装配Person实例 -->
+	<bean id="gerry" class="com.gerry.pang.domain.Person">
+		<constructor-arg index="0" value="gerry" />
+		<constructor-arg index="1" value="21" />
+		<constructor-arg index="2" value="male" />
+		<constructor-arg index="3" value="Beijing" />
+	</bean>
+	
+	<!-- 使用设值注入方式装配Person实例 -->
+	<bean id="studentGerry" class="com.gerry.pang.domain.Student">
+		<property name="id" value="000001" />
+		<property name="name" value="gerry" />
+		<property name="age" value="20" />
+		<property name="gender" value="male" />
+		<property name="address" value="Beijing" />
+		<property name="school" ref="qingHuaHightSchoole" />
+		<property name="klass" ref="gaoYiSanBan" />
+	</bean>
+
+	<bean id="qingHuaHightSchoole" class="com.gerry.pang.domain.School">
+		<property name="id" value="000001" />
+		<property name="name" value="清华附中" />
+		<property name="code" value="S001" />
+	</bean>
+
+	<bean id="gaoYiSanBan" class="com.gerry.pang.domain.Klass">
+		<property name="id" value="000001" />
+		<property name="name" value="高一三班" />
+		<property name="code" value="K1001" />
+	</bean>
+	
+</beans>
