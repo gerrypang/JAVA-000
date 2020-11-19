@@ -13,7 +13,7 @@ import com.gerry.pang.domain.Klass;
 
 @RestController
 @RequestMapping("/data")
-public class DataOpreateController {
+public class DataJDBCController {
 	
 	@Autowired
 	private KlassDAO klassDAO;

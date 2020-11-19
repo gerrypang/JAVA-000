@@ -56,6 +56,11 @@ https://github.com/gerrypang/JAVA-000/blob/main/Week_05/spring-test/src/test/jav
 - 使用事务，PrepareStatement 方式，批处理方式，改进上述操作。
 - 配置 Hikari 连接池，改进上述操作。提交代码到 Github。
 
+代码实现：
+
+- [1、2 两步 JDBC 原生操作](/Week_05/spring-test/src/main/java/com/gerry/pang/controller/DataJDBCController.java)
+- 
+
 3.（选做）总结一下，单例的各种写法，比较它们的优劣。
 
 4.（选做）maven/spring 的 profile 机制，都有什么用法？
