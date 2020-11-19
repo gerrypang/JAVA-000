@@ -11,19 +11,24 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ConfigurationProperties(prefix="spring.test.student")
+@ConfigurationProperties(prefix = "spring.test.student", ignoreInvalidFields = true)
 public class StudentProperties {
-	
-		private Boolean enable;
-	
-		private String id;
 
-		private String name;
-		
-		private Integer age;
-		
-		private String gender;
+	private Boolean enabled;
 
-		private String address;
-		
+	@Builder.Default
+	private String id = "demo-id";
+
+	@Builder.Default
+	private String name = "demo-name";
+
+	@Builder.Default
+	private Integer age = 18;
+
+	@Builder.Default
+	private String gender = "male";
+
+	@Builder.Default
+	private String address = "demo-address";
+
 }
