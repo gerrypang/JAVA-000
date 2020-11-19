@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Klass {
 	
-	private String id;
+	private Integer id;
 	
 	private String name;
 	

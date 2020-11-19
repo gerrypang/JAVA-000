@@ -17,7 +17,7 @@ public class StudentProperties {
 	private Boolean enabled;
 
 	@Builder.Default
-	private String id = "demo-id";
+	private Integer id = 99;
 
 	@Builder.Default
 	private String name = "demo-name";

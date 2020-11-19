@@ -4,7 +4,7 @@ public interface BaseDAO<T> {
 	
 	T saveOne(T domain);
 
-	T updateOne(T domain);
+	boolean updateOne(T domain);
 
 	boolean deleteOne(T domain);
 

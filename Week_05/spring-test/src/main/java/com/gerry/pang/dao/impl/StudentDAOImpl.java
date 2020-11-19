@@ -12,9 +12,9 @@ public class StudentDAOImpl implements StudentDAO {
 	}
 
 	@Override
-	public Student updateOne(Student domain) {
+	public boolean updateOne(Student domain) {
 		// TODO Auto-generated method stub
-		return null;
+		return false;
 	}
 
 	@Override

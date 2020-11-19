@@ -18,8 +18,8 @@
 		{
 			"sourceType": "com.gerry.pang.common.properties.StudentProperties",
 			"name": "spring.test.student.id",
-			"type": "java.lang.String",
-			"defaultValue": "demo-id",
+			"type": "java.lang.Integer",
+			"defaultValue": "99",
 			"description": "student 的 id 属性"
 		},
 		{

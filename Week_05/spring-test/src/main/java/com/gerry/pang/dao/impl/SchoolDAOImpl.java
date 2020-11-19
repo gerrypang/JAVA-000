@@ -11,8 +11,8 @@ public class SchoolDAOImpl implements SchoolDAO {
 	}
 
 	@Override
-	public School updateOne(School domain) {
-		return null;
+	public boolean updateOne(School domain) {
+		return false;
 	}
 
 	@Override
