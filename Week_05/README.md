@@ -58,8 +58,8 @@ https://github.com/gerrypang/JAVA-000/blob/main/Week_05/spring-test/src/test/jav
 
 代码实现：
 
-- [1、2 两步 JDBC 原生操作](/Week_05/spring-test/src/main/java/com/gerry/pang/controller/DataJDBCController.java)
-- 
+- [第 1、2 两步 JDBC 原生操作](/Week_05/spring-test/src/main/java/com/gerry/pang/controller/DataJDBCController.java)
+- [第 3 步 Hikari连接池 + Spring JDBC Template 操作](/Week_05/spring-test/src/main/java/com/gerry/pang/controller/DataHikariController.java)
 
 3.（选做）总结一下，单例的各种写法，比较它们的优劣。
 

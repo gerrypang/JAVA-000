@@ -12,31 +12,31 @@ import com.gerry.pang.dao.KlassDAO;
 import com.gerry.pang.domain.Klass;
 
 @RestController
-@RequestMapping("/data")
+@RequestMapping("/data/jdbc")
 public class DataJDBCController {
 	
 	@Autowired
 	private KlassDAO klassDAO;
 	
-	@GetMapping("/jdbc/save")
+	@GetMapping("/save")
 	public Klass jdbcSaveDemo() {
 		Klass klass = klassDAO.saveOne(Klass.builder().code("K999").name("K-name").build());
 		return klass;
 	}
 
-	@GetMapping("/jdbc/select")
+	@GetMapping("/select")
 	public Klass jdbcSelectDemo() {
 		Klass klass = klassDAO.selectOne(Klass.builder().id(1).build());
 		return klass;
 	}
 
-	@GetMapping("/jdbc/update")
+	@GetMapping("/update")
 	public Boolean jdbcUpdateDemo() {
 		Boolean result = klassDAO.updateOne(Klass.builder().id(1).code("K888").name("K-name-1").build());
 		return result;
 	}
 	
-	@GetMapping("/jdbc/update/batch")
+	@GetMapping("/update/batch")
 	public Boolean jdbcUpdateBatchDemo() {
 		List<Klass> updateList = new ArrayList<>(10);
 		updateList.add(Klass.builder().id(1).code("K1").name("K-name-1").build());
@@ -46,7 +46,7 @@ public class DataJDBCController {
 		return result;
 	}
 
-	@GetMapping("/jdbc/delete")
+	@GetMapping("/delete")
 	public Boolean jdbcDeleteDemo() {
 		Boolean result = klassDAO.deleteOne(Klass.builder().id(1).build());
 		return result;

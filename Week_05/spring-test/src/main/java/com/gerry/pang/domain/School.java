@@ -13,7 +13,7 @@ public class School {
 	
 	private Integer id;
 
-	private String Name;
+	private String name;
 
 	private String code;
 
