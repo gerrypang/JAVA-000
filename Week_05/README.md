@@ -63,6 +63,14 @@ https://github.com/gerrypang/JAVA-000/blob/main/Week_05/spring-test/src/test/jav
 
 3.（选做）总结一下，单例的各种写法，比较它们的优劣。
 
+代码实现：
+
+- [饿汉方式](/Week_05/spring-test/src/main/java/com/gerry/pang/singleton/HungrySingleton.java) 
+- [懒汉（volidate+双重检查）方式](/Week_05/spring-test/src/main/java/com/gerry/pang/singleton/LazySingleton.java) 
+- [静态内部类方式](/Week_05/spring-test/src/main/java/com/gerry/pang/singleton/InnerStaticCLassSingleton.java) 
+- [枚举类方式](/Week_05/spring-test/src/main/java/com/gerry/pang/singleton/EnumSingleton.java) 
+- Spring 内部的单例是更复杂的注册式单例模式
+
 4.（选做）maven/spring 的 profile 机制，都有什么用法？
 
 5.（选做）总结 Hibernate 与 MyBatis 的各方面异同点。
