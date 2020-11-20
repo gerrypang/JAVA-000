@@ -67,6 +67,8 @@ https://github.com/gerrypang/JAVA-000/blob/main/Week_05/spring-test/src/test/jav
 
 5.（选做）总结 Hibernate 与 MyBatis 的各方面异同点。
 
+![mybatis-hiberante差异比较](https://github.com/gerrypang/JAVA-000/tree/main/Week_05/images/mybatis-hiberante.png)
+
 6.（选做）学习 MyBatis-generator 的用法和原理，学会自定义 TypeHandler 处理复杂类型。
 
 ## 附加题（可以后面上完数据库的课再考虑做）：
