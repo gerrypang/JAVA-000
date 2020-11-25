@@ -10,9 +10,8 @@ public class SingletonTest {
 	
 	public static void main(String[] args) {
 		demoByCycleBarrier();
-		
-//		demoByCountDownLatch();
-//		demoByCountDownLatch2();
+		demoByCountDownLatch();
+		demoByCountDownLatch2();
 	}
 	
 	

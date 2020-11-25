@@ -65,8 +65,8 @@ create table tb_sku(
 	name varchar(64) not null comment 'sku名称',
 	good_id bigint not null comment '商品id', 
 	price decimal(10,2) comment '价格',
-  promotion_price decimal(10,2) comment '促销价格',
-  stock int default 0 comment '库存',
+    promotion_price decimal(10,2) comment '促销价格',
+    stock int default 0 comment '库存',
 	sales int default 0 comment '销量',
 	
 	create_time datetime not null comment '创建时间',
@@ -98,7 +98,6 @@ create table tb_specification_option(
 	spec_id bigint not null comment '规格id',
 	value varchar(512) not null comment '选项值', 
 	
-	 
 	create_time datetime not null comment '创建时间',
 	update_time datetime not null comment '更新时间',
 	version int not null comment '版本',
@@ -122,16 +121,17 @@ create table tb_sku_specification(
 )  ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='sku规格信息';
 
 
--- 在命令行模式下，切换到要操作的库，执行如下批量创建数据
+-- 使用存储过程创建模拟100000数据，在命令行模式下，切换到要操作的库，执行如下批量创建数据
 delimiter ;;
 create procedure idata()
 begin
   declare i int;
   set i=1;
   while(i<=100000)do
-    insert into t values(i, i, i);
+    INSERT INTO tb_goods (id, name, brand_id, category1_id, category2_id, category3_id, sales, desc_detail, desc_pack, desc_service, keywords, create_time, update_time, version, is_deleted) VALUES (i, 'iphone x', i, i, null, null, 1000, 'iphone x 详细介绍', 'iphone x 包装信息', 'iphone x 售后服务', 'iphone,apple', '2020-11-24 12:56:00', '2020-11-24 12:56:00', 1, false);
     set i=i+1;
   end while;
 end;;
 delimiter ;
 call idata();
+
