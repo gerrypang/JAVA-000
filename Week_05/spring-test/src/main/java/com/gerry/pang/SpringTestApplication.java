@@ -7,6 +7,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gerry.pang.common.properties.StudentProperties;
 import com.gerry.pang.config.EnableMySpringTestConfiguration;
 import com.gerry.pang.domain.Student;
 
@@ -23,6 +24,9 @@ import com.gerry.pang.domain.Student;
 public class SpringTestApplication {
 
 	private static ApplicationContext applicationContext;
+	
+	@Autowired
+	private StudentProperties configurationProperties;
 
 	@Autowired
 	private Student demoStudent;

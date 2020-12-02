@@ -1,5 +1,7 @@
 package com.gerry.pang.common.properties;
 
+import java.util.Map;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import lombok.AllArgsConstructor;
@@ -31,4 +33,5 @@ public class StudentProperties {
 	@Builder.Default
 	private String address = "demo-address";
 
+	private Map<String, String> map;
 }
