@@ -4,11 +4,8 @@
 
 1. （选做）用今天课上学习的知识，分析自己系统的 SQL 和表结构
 2. （必做）按自己设计的表结构，插入 100 万订单模拟数据，测试不同方式的插入效率
-- insert 单条数据
-- insert 多条数据
-- source
-- import 
 
+- [不同方式的插入效率测试总结](/Week_07/insert_big_data.md)
 
 3. （选做）按自己设计的表结构，插入 1000 万订单模拟数据，测试不同方式的插入效
 4. （选做）使用不同的索引或组合，测试不同方式查询效率
@@ -27,6 +24,7 @@
 3. （必做）读写分离 - 数据库框架版本 2.0
 
 - [sharding-jdbc-3.x demo](/Week_07/sharding-jdbc-demo/README.md)
+- [sharding-jdbc-4.x demo](/Week_07/sharding-jdbc-demo-4.x/README.md)
 
 4. （选做）读写分离 - 数据库中间件版本 3.0
 5. （选做）配置 MHA，模拟 master 宕机
