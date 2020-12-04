@@ -20,7 +20,6 @@
 1. （选做）配置一遍异步复制，半同步复制、组复制
 2. （必做）读写分离 - 动态切换数据源版本 1.0
 
-
 3. （必做）读写分离 - 数据库框架版本 2.0
 
 - [sharding-jdbc-3.x demo](/Week_07/sharding-jdbc-demo/README.md)
@@ -31,3 +30,7 @@
 6. （选做）配置 MGR，模拟 master 宕机
 7. （选做）配置 Orchestrator，模拟 master 宕机，演练 UI 调整拓扑结构
 
+## 参考資料
+态切换数据源版本 1.0参考资料：
+- https://www.cnblogs.com/fishpro/p/spring-boot-study-dynamicdb.html
+- https://blog.csdn.net/laojiaqi/article/details/78964862
