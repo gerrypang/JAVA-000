@@ -32,3 +32,4 @@ CREATE TABLE tb_school (
     PRIMARY KEY( id )
 )
 ENGINE = InnoDB DEFAULT CHARSET = utf8;
+
