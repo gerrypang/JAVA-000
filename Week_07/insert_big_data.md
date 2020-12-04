@@ -40,17 +40,32 @@ create table tb_goods_app like tb_goods;
 insert into tb_goods_app select * from tb_goods;
 ```
 时长：Query OK, 100000 rows affected (5.20 sec)
-缺陷：可以控制对源表的扫描行数和加锁范围很小的。缺陷会对原表加锁，此外必须创建insert的表
+缺陷：可以控制对源表的扫描行数和加锁范围很小的。缺陷会对原表加锁，此外必须先创建insert的表
 
-#### 3、source 方式
+#### 4、source 方式
 ``` SQL
-mysqldump -uroot -p mall tb_goods > tb_goods.sql
+mysqldump -uroot -p --default-character-set=utf8 mall tb_goods --result-file=tb_goods.sql
 
+use mall;
+source tb_goods.sql
 ```
-时长：
-缺陷：
+时长：约10s
+缺陷：导出命令注意使用--result-file，不然导出数据为utf16，此外导出语句中会锁表，导出sql语句其实是insert into values(),()...();形式
 
-#### 4、load 方式
-时长：
-缺陷：每次只能导出一张表的数据，而且表结构也需要另外的语句单独备份
+#### 5、insert into values(),()...() 方式
+时长：约10s
+缺陷：SQL的长度会限制数据条数。
 
+#### 6、load 方式;
+```SQL
+use mall;
+select * from tb_goods into outfile 'D:/tb_goods.csv';
+load data infile 'D:/tb_goods.csv' into table tb_goods;
+```
+时长：Query OK, 100000 rows affected (4.57 sec)
+缺陷：会限制导出的路径，可以修改my.ini中参数secure-file-priv=''为不限制路径
+
+
+### 参考资料：
+- mysqldump命令参数说明 https://dev.mysql.com/doc/refman/5.7/en/mysqldump.html
+- load data命令参数说明 https://dev.mysql.com/doc/refman/5.7/en/load-data.html
