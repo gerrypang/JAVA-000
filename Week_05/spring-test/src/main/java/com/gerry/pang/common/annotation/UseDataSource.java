@@ -17,6 +17,11 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Inherited
-public @interface DataSource {
+public @interface UseDataSource {
+	
 	String value() default "";
+	
+	boolean memberHash() default false;
+
+	String  hashExp() default "";
 }

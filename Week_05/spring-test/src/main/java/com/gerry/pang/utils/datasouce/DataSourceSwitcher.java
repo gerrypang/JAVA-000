@@ -15,6 +15,12 @@ public class DataSourceSwitcher extends AbstractRoutingDataSource {
 		return key;
 	}
 
+	public static String getDataSourceKey() {
+		String key = dataSourceKey.get();
+		log.info("thread:{} set dataSource:{}", Thread.currentThread().getName(), key);
+		return key;
+	}
+	
 	public static void setDataSourceKey(String dataSource) {
 		log.info("thread:{} set dataSource:{}", Thread.currentThread().getName(), dataSource);
 		dataSourceKey.set(dataSource);

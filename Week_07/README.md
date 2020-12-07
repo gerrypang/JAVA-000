@@ -20,6 +20,8 @@
 1. （选做）配置一遍异步复制，半同步复制、组复制
 2. （必做）读写分离 - 动态切换数据源版本 1.0
 
+- [在第5周作业的基础上进行修改为动态数据源](/Week_05/spring-test/src/main/java/com/gerry/pang/controller/DataHikariController.java) 
+
 3. （必做）读写分离 - 数据库框架版本 2.0
 
 - [sharding-jdbc-3.x demo](/Week_07/sharding-jdbc-demo/README.md)
@@ -34,3 +36,4 @@
 态切换数据源版本 1.0参考资料：
 - https://www.cnblogs.com/fishpro/p/spring-boot-study-dynamicdb.html
 - https://blog.csdn.net/laojiaqi/article/details/78964862
+- https://github.com/lywhlao/multiDS

@@ -6,8 +6,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gerry.pang.common.annotation.DSKey;
+import com.gerry.pang.common.annotation.UseDataSource;
 import com.gerry.pang.dao.SchoolDAO;
 import com.gerry.pang.domain. School;
 
@@ -19,14 +22,23 @@ public class DataHikariController {
 	private SchoolDAO schoolDAO;
 	
 	@GetMapping("/save")
+	@UseDataSource("master1")
 	public  School jdbcSaveDemo() {
 		 School klass = schoolDAO.saveOne( School.builder().code("S999").name("S-name").build());
 		return klass;
 	}
 
 	@GetMapping("/select")
+	@UseDataSource("slave1")
 	public  School jdbcSelectDemo() {
 		 School klass = schoolDAO.selectOne( School.builder().id(1).build());
+		return klass;
+	}
+	
+	@GetMapping("/selectId")
+	@UseDataSource(memberHash = true)
+	public  School jdbcSelect2Demo(@RequestParam @DSKey Integer id) {
+		School klass = schoolDAO.selectOne( School.builder().id(id).build());
 		return klass;
 	}
 
