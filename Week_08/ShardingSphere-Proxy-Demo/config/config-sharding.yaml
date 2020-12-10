@@ -1,0 +1,83 @@
+#
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+######################################################################################################
+# 
+# Here you can configure the rules for the proxy.
+# This example is configuration of sharding rule.
+# 
+######################################################################################################
+
+schemaName: sharding_db
+
+dataSources:
+  ds_0:
+    url: jdbc:mysql://127.0.0.1:3306/mall_00?useSSL=false&useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=UTC
+    username: root
+    password:
+    connectionTimeoutMilliseconds: 30000
+    idleTimeoutMilliseconds: 60000
+    maxLifetimeMilliseconds: 1800000
+    maxPoolSize: 50
+  ds_1:
+    url: jdbc:mysql://127.0.0.1:4406/mall_01?useSSL=false&useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=UTC
+    username: root
+    password:
+    connectionTimeoutMilliseconds: 30000
+    idleTimeoutMilliseconds: 60000
+    maxLifetimeMilliseconds: 1800000
+    maxPoolSize: 50
+
+rules:
+- !SHARDING
+  tables:
+    tb_goods:
+      actualDataNodes: ds_${0..1}.tb_goods_${0..15}
+      tableStrategy:
+        standard:
+          shardingColumn: id
+          shardingAlgorithmName: tb_goods_inline
+      #keyGeneratorColumnName: goods_id
+    tb_goods_brand:
+      actualDataNodes: ds_${0..1}.tb_goods_brand_${0..15}
+      tableStrategy:
+        standard:
+          shardingColumn: id
+          shardingAlgorithmName: tb_goods_brand_inline
+      #keyGeneratorColumnName: brand_id
+  bindingTables:
+    - tb_goods,tb_goods_brand
+  defaultDatabaseStrategy:
+    standard:
+      shardingColumn: brand_id
+      shardingAlgorithmName: database_inline
+  # defaultTableStrategy:
+  #   none:
+  
+  shardingAlgorithms:
+    database_inline:
+      type: INLINE
+      props:
+        algorithm-expression: ds_${brand_id % 2}
+    tb_goods_inline:
+      type: INLINE
+      props:
+        algorithm-expression: tb_goods_${id % 16}
+    tb_goods_brand_inline:
+      type: INLINE
+      props:
+        algorithm-expression: tb_goods_brand_${id % 16}
