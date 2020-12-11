@@ -20,7 +20,7 @@ public class DefaultFeignInterceptor implements RequestInterceptor {
 
 	@Override
 	public void apply(RequestTemplate template) {
-		 log.info("FeignInterceptorConfig defaultFeignInterceptor url:{}",template.request().url());
+		log.info("FeignInterceptorConfig defaultFeignInterceptor url:{}", template.request().url());
 	}
 
 }

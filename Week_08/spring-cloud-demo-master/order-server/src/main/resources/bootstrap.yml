@@ -2,18 +2,18 @@ spring:
   application:
     name: order-server
   # alibaba nacos 配置
-  cloud:
-    nacos:
-      # 注册中心配置
-      discovery:
-        # 配置Nacos地址
-        server-addr: localhost:8848
-      # 配置中心配置
-      config:
-        # Nacos地址
-        server-addr: localhost:8848
-        # 这里我们获取的yaml格式的配置
-        file-extension: yaml
+#  cloud:
+#    nacos:
+#      # 注册中心配置
+#      discovery:
+#        # 配置Nacos地址
+#        server-addr: localhost:8848
+#      # 配置中心配置
+#      config:
+#        # Nacos地址
+#        server-addr: localhost:8848
+#        # 这里我们获取的yaml格式的配置
+#        file-extension: yaml
 
 eureka:
   client:
@@ -31,7 +31,7 @@ eureka:
     healthCheckUrlPath: /health
     prefer-ip-address: true
     metadata-map: 
-      metadata: hello-world-1
+      metadata: ${spring.application.name}
 
 management:
   endpoints:

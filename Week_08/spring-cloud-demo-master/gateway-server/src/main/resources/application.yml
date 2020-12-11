@@ -1,0 +1,31 @@
+server: 
+  port: 9000                    
+ 
+
+spring:
+  cloud: 
+    gateway:
+      # 将网关配置为基于使用兼容DiscoveryClient注册中心注册的服务来创建路由。
+      discovery:
+        locator:
+          enabled: true
+      routes: 
+        - id: order-server-route
+          # uri以lb://开头（lb代表从注册中心获取服务），后面接的就是你需要转发到的服务名称, 如果使用lb，必须 discovery.locator.enabled=true
+          uri: lb://order-server
+          predicates:
+          - Path=/order/**
+            
+        - id: product-server-route
+          uri: lb://product-server
+          predicates:
+          - Path=/product/**
+
+# actuator端点允许监视          
+management:
+  endpoints:
+    web:
+      exposure: 
+        include: '*'
+     
+          

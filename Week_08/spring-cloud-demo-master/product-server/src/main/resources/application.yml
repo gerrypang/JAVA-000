@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: product-server  
+    name: product-server
 
 feign:
   client:

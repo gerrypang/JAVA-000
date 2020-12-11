@@ -7,11 +7,17 @@ spring:
     name: discovery-server
 
 eureka:
+  instance:
+    hostname: ${hostname:localhost}
+    preferIpAddress: true
+    lease-renewal-interval-in-seconds: 2
+    lease-expiration-duration-in-seconds: 6
   server:
+    peerEurekaNodesUpdateIntervalMs: 60000
     # 在开发环境，设为false，关闭自我保护，从而保证会注销微服务，默认true
-    enable-self-preservation: false
+    enableSelfPreservation: false
     # 清理间隔，单位毫秒，默认60×1000
-    eviction-interval-timer-in-ms: 4000
+    evictionIntervalTimerInMs: 4000
   client:
     # 代表不向注册中心注册自己
     registerWithEureka: false

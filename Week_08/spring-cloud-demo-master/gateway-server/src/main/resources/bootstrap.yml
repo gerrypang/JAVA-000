@@ -18,4 +18,4 @@ eureka:
     healthCheckUrlPath: /health
     prefer-ip-address: true
     metadata-map: 
-      metadata: hello-world-1
+      metadata: ${spring.application.name}

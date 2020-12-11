@@ -1,4 +1,4 @@
-package com.gerry.pang.common.rest;
+package com.gerry.pang.config;
 
 import java.util.Arrays;
 
