@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: product-server              
+#  cloud:
+#    # 配置服务
+#    config:
+#      name: product-server
+#      # 通过注册多个地址方法是实现ha，此种方式缺陷对动态扩容支持不够友好（不推荐）
+#      # uri:
+#      # - http://localhost:7070/
+#      # 表示使用服务发现组件中Config Server,而不是自己指定uri（推荐）
+#      discovery:
+#        # 默认为false
+#        enabled: true
+#        # 指定服务发现中的serverId
+#        service-id: config-server
+#      # 对应配置文件的profile
+#      profile: test
+#      # 在那个分支下
+#      label: master
+
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+    metadata-map: 
+      metadata: hello-world-2
+      
+      
+      

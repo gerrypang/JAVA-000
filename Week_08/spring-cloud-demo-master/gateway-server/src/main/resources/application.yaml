@@ -1,0 +1,17 @@
+server: 
+  port: 9000                    
+ 
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: order-server
+          uri: lb://order-server
+          predicates:
+            - Path=/order/**
+            
+        - id: product-server
+          uri: lb://product-server
+          predicates:
+            - Path=/product/**
