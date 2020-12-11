@@ -9,7 +9,7 @@
 2. （必做）思考有多少种方式，在 main 函数启动一个新线程，运行一个方法，拿到这个方法的返回值后，退出主线程？
 写出你的方法，越多越好，提交到 Github。
 
-https://github.com/gerrypang/JAVA-000/tree/main/Week_04/src/com/gerry/pang
+https://github.com/gerrypang/JAVA-000/tree/main/Week_04/mutilThreadCompute/src/main/com/gerry/pang
 
 ## 2020-11-07（周六）：
 
