@@ -5,7 +5,6 @@ import java.net.InetSocketAddress;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 
-import io.kimmking.rpcfx.client.ClientHandler;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.Channel;

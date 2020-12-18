@@ -3,7 +3,6 @@ package io.kimmking.rpcfx.connection.netty;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 
-import io.kimmking.rpcfx.server.ServerHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.Channel;
@@ -17,6 +16,7 @@ import io.netty.handler.codec.http.HttpContentCompressor;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.logging.LoggingHandler;
+import io.netty.handler.stream.ChunkedWriteHandler;
 
 public class NettyServer {
 	
@@ -35,9 +35,9 @@ public class NettyServer {
 	}
 	
 	public void start() throws Exception {
-		final ServerHandler serverHandler = new ServerHandler();
         // 创建一个服务端启动类
-        ServerBootstrap serverBootstrap = new ServerBootstrap();
+		final ServerBootstrap serverBootstrap = new ServerBootstrap();
+		final ServerHandler serverHandler = new ServerHandler();
 
         try {
         	// 设定线程池已经线程类型，服务端使用非阻塞io NioServerSocketChannel
@@ -80,7 +80,9 @@ public class NettyServer {
 					// http 压缩
 					ch.pipeline().addLast(new HttpContentCompressor());
 					// http 消息聚合器  512*1024为接收的最大contentlength
-					ch.pipeline().addLast(new HttpObjectAggregator(512*1024));
+					ch.pipeline().addLast(new HttpObjectAggregator(512 * 1024));
+					// 支持异步发送大码流（例文件传输），但不占用过多内存，防止NPE
+					ch.pipeline().addLast(new ChunkedWriteHandler());
 					// 追加处理器
 					ch.pipeline().addLast(serverHandler);
 				}

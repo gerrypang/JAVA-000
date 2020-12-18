@@ -54,6 +54,8 @@ public final class RpcfxHandler<T> {
 //		String respJson = client.newCall(request).execute().body().string();
 //		System.out.println("resp json: " + respJson);
 //		return JSON.parseObject(respJson, RpcfxResponse.class);
+		
+		//https://blog.csdn.net/wangshuang1631/article/details/73251180
 	}
 
 }
