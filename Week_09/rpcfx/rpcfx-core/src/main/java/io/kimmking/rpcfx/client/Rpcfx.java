@@ -1,6 +1,5 @@
 package io.kimmking.rpcfx.client;
 
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.parser.ParserConfig;
 import io.kimmking.rpcfx.api.RpcfxRequest;
@@ -22,10 +21,8 @@ public final class Rpcfx {
     }
 
     public static <T> T create(final Class<T> serviceClass, final String url) {
-
         // 0. 替换动态代理 -> AOP
         return (T) Proxy.newProxyInstance(Rpcfx.class.getClassLoader(), new Class[]{serviceClass}, new RpcfxInvocationHandler(serviceClass, url));
-
     }
 
     public static class RpcfxInvocationHandler implements InvocationHandler {

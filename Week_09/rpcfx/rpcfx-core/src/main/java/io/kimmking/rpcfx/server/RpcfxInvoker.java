@@ -34,14 +34,10 @@ public class RpcfxInvoker {
             response.setStatus(true);
             return response;
         } catch ( IllegalAccessException | InvocationTargetException e) {
-
             // 3.Xstream
-
             // 2.封装一个统一的 	RpcfxException
-        	
             // 客户端也需要判断异常
-            e.printStackTrace();
-            response.setException(e);
+            response.setException(new RpcfxException(e.getMessage()));
             response.setStatus(false);
             return response;
         }
