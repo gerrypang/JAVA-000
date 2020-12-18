@@ -1,0 +1,35 @@
+// 指定proto3格式
+syntax = "proto3";
+
+
+// 一些生成代码的设置
+// 以非外部类模式生成
+option java_multiple_files = true;
+// 所在包名
+option go_package = "pbfs/double_way_stream";
+option java_package = "com.gerry.pang.grpc.api";
+option java_outer_classname = "HelloWorldProto";
+option objc_class_prefix = "HLW";
+
+package helloworld;
+
+message HelloRequest {
+    // 参数默认都为可选，如果没有赋值，那么接口中不会出现该参数，不会默认为null之类的
+    string serviceName = 1;
+    string methodName = 2;
+    string messageData = 3;
+    string request_id = 4;
+}
+
+message HelloResponse {
+    string serviceName = 1;
+    string methodName = 2;
+    string messageData = 3;
+    string request_id = 4;
+}
+
+service HelloService {
+  // 双向流式
+  rpc SayHello (stream HelloRequest) returns (stream HelloResponse) {}
+}
+
