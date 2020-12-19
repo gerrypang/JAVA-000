@@ -1,7 +1,7 @@
 # Week09 作业题目
 
 
-分布式事务集成代码已经补上了，麻烦老师看一下，地址是
+week8 第二个必做作业：分布式事务集成代码已经补上了，麻烦老师看一下，地址是
 
 https://github.com/gerrypang/JAVA-000/tree/main/Week_08/spring-cloud-demo-hmliy
 
