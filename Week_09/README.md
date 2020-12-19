@@ -1,5 +1,12 @@
 # Week09 作业题目
 
+
+分布式事务集成代码已经补上了，麻烦老师看一下，地址是
+
+https://github.com/gerrypang/JAVA-000/tree/main/Week_08/spring-cloud-demo-hmliy
+
+
+
 ## 2020-12-12（周六）：
 
 1. （选做）实现简单的 Protocol Buffer / Thrift / gRPC(选任一个) 远程调用 demo。
