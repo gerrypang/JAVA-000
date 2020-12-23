@@ -1,20 +1,18 @@
-package io.kimmking.rpcfx.connection.netty;
+package io.kimmking.rpcfx.protocol.customrpc;
 
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 
-import io.netty.buffer.ByteBuf;
+import io.kimmking.rpcfx.protocol.customrpc.message.RpcfxHeader;
+import io.kimmking.rpcfx.protocol.customrpc.message.RpcfxMessage;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.handler.codec.http.FullHttpResponse;
 import io.netty.util.CharsetUtil;
-import io.netty.util.ReferenceCountUtil;
 
-public class ClientHandler extends SimpleChannelInboundHandler<FullHttpResponse> {
+public class CustomRPCHandler extends SimpleChannelInboundHandler<RpcfxMessage> {
 	
-	private static final Log log = LogFactory.getLog(ClientHandler.class);
+	private static final Log log = LogFactory.getLog(CustomRPCHandler.class);
 	
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -28,9 +26,9 @@ public class ClientHandler extends SimpleChannelInboundHandler<FullHttpResponse>
 	}
 
 	@Override
-	protected void channelRead0(ChannelHandlerContext ctx, FullHttpResponse msg) throws Exception {
-		// TODO Auto-generated method stub
-		
+	protected void channelRead0(ChannelHandlerContext ctx, RpcfxMessage msg) throws Exception {
+		RpcfxHeader header = msg.getHeader();
+		Object body = msg.getBody();
 	}
 	
 	/**

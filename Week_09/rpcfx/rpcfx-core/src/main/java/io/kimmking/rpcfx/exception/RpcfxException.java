@@ -17,4 +17,8 @@ public class RpcfxException extends Exception {
 		super(message);
 	}
 
+	public RpcfxException(String message, Throwable throwable) {
+		super(message, throwable);
+	}
+
 }

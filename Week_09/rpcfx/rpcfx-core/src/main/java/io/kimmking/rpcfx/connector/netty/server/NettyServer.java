@@ -1,22 +1,19 @@
-package io.kimmking.rpcfx.connection.netty;
+package io.kimmking.rpcfx.connector.netty.server;
 
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 
+import io.kimmking.rpcfx.connector.netty.client.NettyClient;
+import io.kimmking.rpcfx.enums.NettySocketEnum;
+import io.kimmking.rpcfx.protocol.rest.RestChannelInitializer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.epoll.EpollChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.codec.http.HttpContentCompressor;
-import io.netty.handler.codec.http.HttpObjectAggregator;
-import io.netty.handler.codec.http.HttpServerCodec;
-import io.netty.handler.logging.LoggingHandler;
-import io.netty.handler.stream.ChunkedWriteHandler;
 
 public class NettyServer {
 	
@@ -37,8 +34,6 @@ public class NettyServer {
 	public void start() throws Exception {
         // 创建一个服务端启动类
 		final ServerBootstrap serverBootstrap = new ServerBootstrap();
-		final ServerHandler serverHandler = new ServerHandler();
-
         try {
         	// 设定线程池已经线程类型，服务端使用非阻塞io NioServerSocketChannel
 			serverBootstrap.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class);
@@ -66,27 +61,7 @@ public class NettyServer {
                     // 缓存区 池化操作
                     .option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
 			
-            serverBootstrap.childHandler(new ChannelInitializer<Channel>() {
-				@Override
-				protected void initChannel(Channel ch) throws Exception {
-					ch.pipeline().addLast(new LoggingHandler());
-					// 客户端发送的是httprequest，所以要使用HttpRequestEncoder进行编码
-					// ch.pipeline().addLast(new HttpRequestDecoder());
-					// 客户端接收到的是httpResponse响应，所以要使用HttpResponseDecoder进行解码
-					// ch.pipeline().addLast(new HttpResponseEncoder());
-					
-					// http server端编解码
-					ch.pipeline().addLast(new HttpServerCodec());
-					// http 压缩
-					ch.pipeline().addLast(new HttpContentCompressor());
-					// http 消息聚合器  512*1024为接收的最大contentlength
-					ch.pipeline().addLast(new HttpObjectAggregator(512 * 1024));
-					// 支持异步发送大码流（例文件传输），但不占用过多内存，防止NPE
-					ch.pipeline().addLast(new ChunkedWriteHandler());
-					// 追加处理器
-					ch.pipeline().addLast(serverHandler);
-				}
-			}); 
+            serverBootstrap.childHandler(new RestChannelInitializer(NettySocketEnum.SERVER)); 
             // 异步地绑定服务器调用sync方法阻塞直到绑定完成
             Channel channel = serverBootstrap.bind(port).sync().channel();
 			log.info("开启netty http服务器，监听地址和端口为 http://127.0.0.1:" + port);
