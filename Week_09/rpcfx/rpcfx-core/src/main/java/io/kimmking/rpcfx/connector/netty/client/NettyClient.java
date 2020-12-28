@@ -5,6 +5,8 @@ import java.net.InetSocketAddress;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 
+import com.alibaba.fastjson.JSONObject;
+
 import io.kimmking.rpcfx.enums.NettySocketEnum;
 import io.kimmking.rpcfx.protocol.rest.RestChannelInitializer;
 import io.netty.bootstrap.Bootstrap;
@@ -14,23 +16,26 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
-import io.netty.channel.epoll.EpollChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
+//https://www.cnblogs.com/scy251147/p/10721736.html
 public class NettyClient {
 	
 	private static final Log log = LogFactory.getLog(NettyClient.class);
 	
 	private final String host ;
 	private final int port ;
+	// 事件池
 	private final EventLoopGroup group;
+	// 客户端通道
+	private Channel clientChannel;
 	
-	public NettyClient(String host, int port, int groupNum) {
+	public NettyClient(String host, int port) {
 		super();
 		this.host = host;
 		this.port = port;
-		this.group = new NioEventLoopGroup(groupNum);
+		this.group = new NioEventLoopGroup();
 	}
 
 	public Channel start() throws Exception {
@@ -39,6 +44,7 @@ public class NettyClient {
 		// 客户端使用非阻塞io NioSocketChannel
 		client.group(group).channel(NioSocketChannel.class)
 			 .remoteAddress(new InetSocketAddress(host, port))
+			 // 将小数据包包装成更大数据包，提高网络负载，会导致tcp响应延迟
 			 .option(ChannelOption.TCP_NODELAY, true)
              // 长连接
              .option(ChannelOption.SO_KEEPALIVE, true)
@@ -48,33 +54,48 @@ public class NettyClient {
              .option(ChannelOption.SO_RCVBUF, 32 * 1024)
              // 配置发送缓冲区32k
              .option(ChannelOption.SO_SNDBUF, 32 * 1024)
-             // 支持多个进程或者线程绑定到同一端口，提高服务器程序的性能  ？？
-             .option(EpollChannelOption.SO_REUSEPORT, true)
              // 缓存区 池化操作
              .option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
              .handler(new RestChannelInitializer(NettySocketEnum.CLIENT));
-		ChannelFuture future = client.connect().sync();
+		ChannelFuture channelFuture = client.connect();
 
-		// 在连接建立成功之后添加监听
-		future.addListener(new ChannelFutureListener() {
+		// 注册连接事件listener
+		channelFuture.addListener(new ChannelFutureListener() {
 			@Override
 			public void operationComplete(ChannelFuture future) throws Exception {
 				if (future.isSuccess()) {
 					log.info("client connect server success");
 				} else {
+					log.info("客户端[" + channelFuture.channel().localAddress().toString() + "]连接失败，重新连接中...");
+					future.channel().close();
 					log.info("client connect server error, " + future.cause().getMessage());
 				}
 			}
 		});
 		
-		return future.channel();
+		// 注册关闭事件
+        channelFuture.channel().closeFuture().addListener(cfl -> {
+            close();
+            log.info("客户端[" + channelFuture.channel().localAddress().toString() + "]已断开...");
+        });
+        log.info("===> clientChannel: "+ JSONObject.toJSONString(clientChannel));
+		return channelFuture.channel();
 	}
 	
-	
-	public void closeGorup() throws InterruptedException {
+	public void close() throws InterruptedException {
+		// 关闭客户端套接字
+		if (clientChannel != null) {
+			clientChannel.close();
+			log.info("clientChannel disconnect success");
+		}
+		// 关闭客户端线程组
 		if (group != null) {
 			group.shutdownGracefully().sync();
-			log.info("client disconnect success");
+			log.info("group disconnect success");
 		}
+	}
+
+	public Channel getClientChannel() {
+		return clientChannel;
 	}
 }

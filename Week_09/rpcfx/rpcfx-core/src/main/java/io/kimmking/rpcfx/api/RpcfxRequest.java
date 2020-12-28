@@ -1,7 +1,7 @@
 package io.kimmking.rpcfx.api;
 
 public class RpcfxRequest {
-
+ 
   private String serviceClass;
 
   private String method;

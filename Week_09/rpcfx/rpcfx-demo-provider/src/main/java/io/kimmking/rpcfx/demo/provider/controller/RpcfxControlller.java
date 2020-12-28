@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSONObject;
+
 import io.kimmking.rpcfx.api.RpcfxRequest;
 import io.kimmking.rpcfx.api.RpcfxResponse;
 import io.kimmking.rpcfx.server.RpcfxInvoker;
@@ -19,6 +21,7 @@ public class RpcfxControlller {
 
 	@PostMapping
 	public RpcfxResponse invoke(@RequestBody RpcfxRequest request) {
+		System.out.println("request:" + JSONObject.toJSONString(request));
 		return invoker.invoke(request);
 	}
 }

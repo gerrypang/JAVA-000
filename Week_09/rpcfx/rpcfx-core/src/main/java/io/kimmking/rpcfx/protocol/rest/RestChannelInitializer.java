@@ -1,16 +1,25 @@
 package io.kimmking.rpcfx.protocol.rest;
 
+import io.kimmking.rpcfx.api.RpcfxRequest;
+import io.kimmking.rpcfx.api.RpcfxResponse;
 import io.kimmking.rpcfx.enums.NettySocketEnum;
-import io.netty.channel.Channel;
+import io.kimmking.rpcfx.protocol.rest.codec.HttpJsonRequestDecoder;
+import io.kimmking.rpcfx.protocol.rest.codec.HttpJsonRequestEncoder;
+import io.kimmking.rpcfx.protocol.rest.codec.HttpJsonResponseDecoder;
+import io.kimmking.rpcfx.protocol.rest.codec.HttpJsonResponseEncoder;
 import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelPipeline;
+import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpClientCodec;
-import io.netty.handler.codec.http.HttpContentCompressor;
-import io.netty.handler.codec.http.HttpContentDecompressor;
 import io.netty.handler.codec.http.HttpObjectAggregator;
-import io.netty.handler.codec.http.HttpServerCodec;
+import io.netty.handler.codec.http.HttpRequestDecoder;
+import io.netty.handler.codec.http.HttpRequestEncoder;
+import io.netty.handler.codec.http.HttpResponseDecoder;
+import io.netty.handler.codec.http.HttpResponseEncoder;
+import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 
-public class RestChannelInitializer extends ChannelInitializer<Channel> {
+public class RestChannelInitializer extends ChannelInitializer<SocketChannel> {
 	
 	public NettySocketEnum socketEnum;
 	
@@ -20,31 +29,41 @@ public class RestChannelInitializer extends ChannelInitializer<Channel> {
 	}
 
 	@Override
-	protected void initChannel(Channel ch) throws Exception {
-		ch.pipeline().addLast(new LoggingHandler());
+	protected void initChannel(SocketChannel ch) throws Exception {
+		ChannelPipeline pipeline = ch.pipeline();
+		pipeline.addLast("LoggingHandler", new LoggingHandler(LogLevel.DEBUG));
+		pipeline.addLast("HttpClientCodec", new HttpClientCodec());
+//		pipeline.addLast("HttpObjectAggregator", new HttpObjectAggregator(512 *	1024));
+		pipeline.addLast("CustomRestClientHandler", new CustomRestClientHandler());
+
+//		pipeline.addLast("HttpClientCodec", new HttpClientCodec());
+		
+		
 		
 		if (NettySocketEnum.CLIENT.equals(socketEnum)) {
+//			pipeline.addLast("HttpJsonResponseDecoder", new HttpJsonResponseDecoder(RpcfxResponse.class, true));
+
+			
+//			pipeline.addLast("HttpJsonRequestEncoder", new HttpJsonRequestEncoder());
+
 			// http client端编解码
-			ch.pipeline().addLast(new HttpClientCodec());
 			// http 解压
-			ch.pipeline().addLast(new HttpContentDecompressor());
-			// http 消息聚合器 512*1024为接收的最大contentlength
-			ch.pipeline().addLast(new HttpObjectAggregator(512 * 1024));
-			// 请求处理器
-//			ch.pipeline().addLast(new CustomRestClientHandler());
+//			pipeline.addLast("HttpContentDecompressor", new HttpContentDecompressor());
+			// http 消息聚合器 512*1024为接收的最大contentlength			
+//			pipeline.addLast("CustomRestClientHandler", new CustomRestClientHandler());
 		}
 		
-		if (NettySocketEnum.SERVER.equals(socketEnum)) {
-			// http server端编解码
-			ch.pipeline().addLast(new HttpServerCodec());
-			// http 压缩
-			ch.pipeline().addLast(new HttpContentCompressor());
-			// http 消息聚合器 512*1024为接收的最大contentlength
-			ch.pipeline().addLast(new HttpObjectAggregator(512 * 1024));
-		}
-		// 请求处理器
-		ch.pipeline().addLast(new CustomRestServerHandler());
-		
+//		if (NettySocketEnum.SERVER.equals(socketEnum)) {
+//			// http server端编解码
+//			pipeline.addLast("HttpRequestDecoder", new HttpRequestDecoder());
+//			// http 压缩
+////			pipeline.addLast("HttpContentCompressor", new HttpContentCompressor());
+//			// http 消息聚合器 512*1024为接收的最大contentlength
+//			pipeline.addLast("HttpObjectAggregator", new HttpObjectAggregator(512 * 1024));
+//			pipeline.addLast("HttpJsonRequestDecoder", new HttpJsonRequestDecoder(RpcfxRequest.class, true));
+//			pipeline.addLast("HttpResponseEncoder", new HttpResponseEncoder());
+//			pipeline.addLast("HttpJsonResponseEncoder", new HttpJsonResponseEncoder());
+//		}
 	}
 
 }
