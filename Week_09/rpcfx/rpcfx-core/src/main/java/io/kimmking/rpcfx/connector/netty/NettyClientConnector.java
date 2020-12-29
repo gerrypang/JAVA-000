@@ -15,7 +15,6 @@ import io.kimmking.rpcfx.api.RpcfxRequest;
 import io.kimmking.rpcfx.api.RpcfxResponse;
 import io.kimmking.rpcfx.connector.Connector;
 import io.kimmking.rpcfx.connector.netty.client.NettyClient;
-import io.kimmking.rpcfx.protocol.rest.codec.HttpJsonRequest;
 import io.kimmking.rpcfx.utils.GuavaCacheManager;
 import io.kimmking.rpcfx.utils.SyncFuture;
 import io.netty.buffer.ByteBuf;
@@ -34,9 +33,9 @@ import io.netty.util.concurrent.GenericFutureListener;
 
 // https://segmentfault.com/a/1190000020507086
 // https://www.cnblogs.com/carl10086/p/6185095.html
-public class NettyConnector implements Connector {
+public class NettyClientConnector implements Connector {
 	
-	private static final Log log = LogFactory.getLog(NettyConnector.class);
+	private static final Log log = LogFactory.getLog(NettyClientConnector.class);
 	
 	@Override
 	public RpcfxResponse sendRequest(RpcfxRequest req, String url) throws IOException {

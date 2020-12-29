@@ -4,7 +4,6 @@ import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 
 import io.kimmking.rpcfx.api.RpcfxResponse;
 import io.kimmking.rpcfx.utils.GuavaCacheManager;
@@ -13,8 +12,6 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.handler.codec.http.FullHttpRequest;
-import io.netty.handler.codec.http.FullHttpResponse;
 import io.netty.handler.codec.http.HttpContent;
 import io.netty.handler.codec.http.HttpObject;
 import io.netty.handler.codec.http.HttpResponse;
@@ -26,13 +23,13 @@ import io.netty.util.CharsetUtil;
 public class CustomRestClientHandler extends SimpleChannelInboundHandler<HttpObject> {
 
 	private static final Log log = LogFactory.getLog(CustomRestClientHandler.class);
+	
 	private ChannelHandlerContext ctx;
 
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
-		// ctx.writeAndFlush(Unpooled.copiedBuffer("Hello netty!", CharsetUtil.UTF_8));
-		this.ctx = ctx;
 		log.info("===== 请求连接成功 ===== ");
+		this.ctx = ctx;
 		super.channelActive(ctx);
 	}
 
@@ -57,49 +54,42 @@ public class CustomRestClientHandler extends SimpleChannelInboundHandler<HttpObj
 
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, HttpObject msg) throws Exception {
-		log.info(" CustomRestServerHandler read0 ===>");
+		log.info("===== CustomRestClientHandler read0 start ===== ");
 		if (msg instanceof HttpResponse) {
             HttpResponse response = (HttpResponse) msg;
-            System.err.println("STATUS: " + response.status());
-            System.err.println("VERSION: " + response.protocolVersion());
-            System.err.println();
+            log.info("STATUS: " + response.status());
+            log.info("VERSION: " + response.protocolVersion());
 
             if (!response.headers().isEmpty()) {
                 for (CharSequence name: response.headers().names()) {
                     for (CharSequence value: response.headers().getAll(name)) {
-                        System.err.println("HEADER: " + name + " = " + value);
+                    	log.info("HEADER: " + name + " = " + value);
                     }
                 }
-                System.err.println();
             }
 
             if (HttpUtil.isTransferEncodingChunked(response)) {
-                System.err.println("CHUNKED CONTENT {");
+            	log.info("CHUNKED CONTENT {");
             } else {
-                System.err.println("CONTENT {");
-            }
-        }
-        if (msg instanceof HttpContent) {
-            HttpContent content = (HttpContent) msg;
-
-            String json = content.content().toString(CharsetUtil.UTF_8);
-            System.err.print(json);
-            System.err.flush();
-            
-//    		HttpResponse httpResponse = msg.getResponse();
-//    		RpcfxResponse response = (RpcfxResponse) msg.getBody();
-            RpcfxResponse rpcResponse = JSON.parseObject(json, RpcfxResponse.class);
-    		SyncFuture<RpcfxResponse> syncFuture = GuavaCacheManager.getFutureCache().get(ctx.channel().id().asShortText());
-    		System.out.println("=== syncFuture " + syncFuture);
-    		System.out.println("=== response " + rpcResponse);
-    		syncFuture.setResponse(rpcResponse);
-            
-            if (content instanceof LastHttpContent) {
-                System.err.println("} END OF CONTENT");
-                ctx.close();
+            	log.info("CONTENT {");
             }
         }
 		
+        if (msg instanceof HttpContent) {
+            HttpContent content = (HttpContent) msg;
+            String json = content.content().toString(CharsetUtil.UTF_8);
+            RpcfxResponse rpcResponse = JSON.parseObject(json, RpcfxResponse.class);
+    		SyncFuture<RpcfxResponse> syncFuture = GuavaCacheManager.getFutureCache().get(ctx.channel().id().asShortText());
+    		log.info("=== syncFuture：" + syncFuture);
+    		log.info("=== rpcResponse：" + rpcResponse);
+    		syncFuture.setResponse(rpcResponse);
+    		
+            if (content instanceof LastHttpContent) {
+            	log.info("} END OF CONTENT");
+                ctx.close();
+            }
+        }
+        log.info("===== CustomRestClientHandler read0 end ===== ");
 	}
 
 }

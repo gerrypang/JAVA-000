@@ -1,4 +1,4 @@
-package io.kimmking.rpcfx.client.jdk;
+package io.kimmking.rpcfx.client;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;

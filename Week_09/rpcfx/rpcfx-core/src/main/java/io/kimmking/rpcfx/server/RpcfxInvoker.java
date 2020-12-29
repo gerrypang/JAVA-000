@@ -24,7 +24,6 @@ public class RpcfxInvoker {
 		String serviceClass = request.getServiceClass();
 
 		// 作业1：改成泛型和反射
-
 		try {
 			Object service = resolver.resolve(serviceClass);
 			Method method = resolveMethodFromClass(service.getClass(), request.getMethod());
