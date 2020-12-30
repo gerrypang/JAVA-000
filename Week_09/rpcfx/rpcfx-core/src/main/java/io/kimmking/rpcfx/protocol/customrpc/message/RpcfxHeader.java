@@ -1,9 +1,12 @@
 package io.kimmking.rpcfx.protocol.customrpc.message;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class RpcfxHeader {
+public final class RpcfxHeader implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	private int crcCode = 0xabef0101;
 	

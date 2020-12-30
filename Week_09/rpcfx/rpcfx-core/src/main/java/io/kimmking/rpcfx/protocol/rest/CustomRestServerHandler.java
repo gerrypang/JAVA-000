@@ -111,8 +111,8 @@ public class CustomRestServerHandler extends SimpleChannelInboundHandler<HttpObj
         }
 		
         if (msg instanceof HttpContent) {
-        	//resolver = ResolverFactory.getRpcfxResolver();
-        	log.info("==> resolver:" + JSON.toJSONString(resolver));
+//        	resolver = ResolverFactory.getRpcfxResolver();
+//        	log.info("==> resolver:" + JSON.toJSONString(resolver));
         	
             HttpContent content = (HttpContent) msg;
             String json = content.content().toString(CharsetUtil.UTF_8);
@@ -144,7 +144,6 @@ public class CustomRestServerHandler extends SimpleChannelInboundHandler<HttpObj
     private boolean writeResponse(HttpObject currentObj, ChannelHandlerContext ctx, RpcfxResponse rpcResponse) {
         // Decide whether to close the connection or not.
         boolean keepAlive = HttpUtil.isKeepAlive(request);
-                
         
         // Build the response object.
         FullHttpResponse response = new DefaultFullHttpResponse(

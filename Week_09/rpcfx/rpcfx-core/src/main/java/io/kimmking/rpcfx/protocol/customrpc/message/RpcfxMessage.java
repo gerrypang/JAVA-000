@@ -1,12 +1,16 @@
 package io.kimmking.rpcfx.protocol.customrpc.message;
 
-public final class RpcfxMessage<T> {
+import java.io.Serializable;
+
+public final class RpcfxMessage implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	/** 消息头 */
 	private RpcfxHeader header;
 
 	/** 消息体 */
-	private T body;
+	private Object body;
 
 	public RpcfxHeader getHeader() {
 		return header;
@@ -16,11 +20,11 @@ public final class RpcfxMessage<T> {
 		this.header = header;
 	}
 
-	public T getBody() {
+	public Object getBody() {
 		return body;
 	}
 
-	public void setBody(T body) {
+	public void setBody(Object body) {
 		this.body = body;
 	}
 

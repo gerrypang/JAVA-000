@@ -1,5 +1,7 @@
 package io.kimmking.rpcfx.client.byteBuddy;
 
+import java.lang.reflect.InvocationHandler;
+
 import io.kimmking.rpcfx.client.RpcfxClient;
 import io.kimmking.rpcfx.client.RpcfxInvocationHandler;
 import io.kimmking.rpcfx.connector.Connector;
@@ -25,11 +27,12 @@ public class RpcfxClientByteBuddy implements RpcfxClient {
 	@Override
 	public <T> T create(Class<T> serviceClass, String url) {
 		T result = null;
+		InvocationHandler rpcfxInvocationHandler = new RpcfxInvocationHandler(serviceClass, url, connector);
 		try {
 			result = (T) new ByteBuddy()
 					.subclass(Object.class)
 					.implement(serviceClass)
-					.intercept(InvocationHandlerAdapter.of(new RpcfxInvocationHandler(serviceClass, url, connector)))
+					.intercept(InvocationHandlerAdapter.of(rpcfxInvocationHandler))
 					.make()
 					.load(RpcfxClientByteBuddy.class.getClassLoader())
 					.getLoaded()

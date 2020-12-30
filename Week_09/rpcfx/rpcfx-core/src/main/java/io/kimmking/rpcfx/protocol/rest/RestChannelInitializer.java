@@ -16,15 +16,18 @@ public class RestChannelInitializer extends ChannelInitializer<SocketChannel> {
 	
 	private RpcfxResolver resolver;
 	
-	public RestChannelInitializer(NettySocketEnum socketEnum, RpcfxResolver resolver) {
-		super();
-		this.socketEnum = socketEnum;
-		this.resolver = resolver;
-	}
 	public RestChannelInitializer(NettySocketEnum socketEnum) {
 		this(socketEnum, null);
 	}
 	
+	public RestChannelInitializer(NettySocketEnum socketEnum, RpcfxResolver resolver) {
+		this.socketEnum = socketEnum;
+		this.resolver = resolver;
+	}
+	
+	public void setResolver(RpcfxResolver resolver) {
+		this.resolver = resolver;
+	}
 
 	@Override
 	protected void initChannel(SocketChannel ch) throws Exception {

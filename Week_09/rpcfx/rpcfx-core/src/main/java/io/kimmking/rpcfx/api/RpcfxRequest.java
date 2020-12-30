@@ -1,6 +1,10 @@
 package io.kimmking.rpcfx.api;
 
-public class RpcfxRequest {
+import java.io.Serializable;
+
+public class RpcfxRequest implements Serializable {
+
+	private static final long serialVersionUID = 1L;
  
   private String serviceClass;
 
