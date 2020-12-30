@@ -20,7 +20,7 @@ https://github.com/gerrypang/JAVA-000/tree/main/Week_08/spring-cloud-demo-hmliy
     (3) 尝试使用 Netty + HTTP 作为 client 端传输方式。
 
 
-- [改造自定义 RPC 的程序](/Week_09/rpcfx)   先站个坑 还在搞ing
+- [改造自定义 RPC 的程序](/Week_09/rpcfx/README.md) 
 
 
 4. （选做☆☆）升级自定义 RPC 的程序：
@@ -31,6 +31,8 @@ https://github.com/gerrypang/JAVA-000/tree/main/Week_08/spring-cloud-demo-hmliy
     (4) 尝试压测改进后的 RPC 并分析优化，有问题欢迎群里讨论；
     (5) 尝试将 fastjson 改成 xstream；
     (6) 尝试使用字节码生成方式代替服务端反射。
+
+- [改造自定义 RPC 的程序](/Week_09/rpcfx/README.md) 
 
 
 ## 2020-12-13（周日）：
