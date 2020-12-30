@@ -1,5 +1,6 @@
-###  改造自定义 RPC 的程序，提交到 GitHub：
+##  改造自定义 RPC 的程序
 
+### 实现内容
 - [x] (1) 尝试将服务端写死查找接口实现类变成泛型和反射；
 
 - [x] (2) 尝试将客户端动态代理改成 AOP，添加异常处理；
@@ -19,3 +20,8 @@
 - [ ] (9) 尝试使用字节码生成方式代替服务端反射。
 
 
+### 参考资料
+- https://www.cnblogs.com/scy251147/p/10721736.html
+- https://segmentfault.com/a/1190000020507086
+- https://www.cnblogs.com/carl10086/p/6185095.html
+- https://github.com/netty/netty/blob/4.1/example/src/main/java/io/netty/example/

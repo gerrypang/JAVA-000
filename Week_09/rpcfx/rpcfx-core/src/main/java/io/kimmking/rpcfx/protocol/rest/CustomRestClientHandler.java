@@ -23,13 +23,10 @@ import io.netty.util.CharsetUtil;
 public class CustomRestClientHandler extends SimpleChannelInboundHandler<HttpObject> {
 
 	private static final Log log = LogFactory.getLog(CustomRestClientHandler.class);
-	
-	private ChannelHandlerContext ctx;
 
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
 		log.info("===== 请求连接成功 ===== ");
-		this.ctx = ctx;
 		super.channelActive(ctx);
 	}
 
