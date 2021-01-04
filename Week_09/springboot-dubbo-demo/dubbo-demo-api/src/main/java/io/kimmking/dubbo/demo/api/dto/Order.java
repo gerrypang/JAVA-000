@@ -1,8 +1,10 @@
-package io.kimmking.dubbo.demo.api;
+package io.kimmking.dubbo.demo.api.dto;
 
 public class Order implements java.io.Serializable {
 
-    private int id;
+	private static final long serialVersionUID = 1L;
+
+	private int id;
 
     private String name;
 

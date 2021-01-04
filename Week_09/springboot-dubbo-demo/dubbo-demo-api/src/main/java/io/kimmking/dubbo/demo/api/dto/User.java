@@ -1,8 +1,10 @@
-package io.kimmking.dubbo.demo.api;
+package io.kimmking.dubbo.demo.api.dto;
 
 public class User implements java.io.Serializable {
+ 
+	private static final long serialVersionUID = 1L;
 
-    public User(){}
+	public User(){}
 
     public User(int id, String name) {
         this.id = id;
