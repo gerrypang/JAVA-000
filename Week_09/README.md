@@ -47,7 +47,7 @@ https://github.com/gerrypang/JAVA-000/tree/main/Week_08/spring-cloud-demo-hmliy
     (2) 用户 B 的美元账户和人民币账户都在 B 库，使用 7 人民币兑换 1 美元 ;
     (3) 设计账户表，冻结资产表，实现上述两个本地事务的分布式事务。
 
-- [结合 dubbo + hmily实现一个 TCC 外汇交易处理](/Week_09/springboot-dubbo-demo)  先站个坑 还在搞ing
+- [结合 dubbo + hmily实现一个 TCC 外汇交易处理](/Week_09/springboot-dubbo-demo/README.md)  
 
 4. （挑战☆☆）尝试扩展 Dubbo
 
