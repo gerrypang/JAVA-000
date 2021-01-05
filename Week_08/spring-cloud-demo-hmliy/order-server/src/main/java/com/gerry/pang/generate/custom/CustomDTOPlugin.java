@@ -1,15 +1,5 @@
 package com.gerry.pang.generate.custom;
 
-import org.apache.commons.lang3.StringUtils;
-import org.mybatis.generator.api.*;
-import org.mybatis.generator.api.dom.DefaultJavaFormatter;
-import org.mybatis.generator.api.dom.java.*;
-import org.mybatis.generator.api.dom.xml.Attribute;
-import org.mybatis.generator.api.dom.xml.XmlElement;
-import org.mybatis.generator.internal.util.JavaBeansUtil;
-import org.mybatis.generator.internal.util.StringUtility;
-
-import javax.swing.text.Document;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -17,6 +7,19 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.StringUtils;
+import org.mybatis.generator.api.GeneratedJavaFile;
+import org.mybatis.generator.api.IntrospectedColumn;
+import org.mybatis.generator.api.IntrospectedTable;
+import org.mybatis.generator.api.PluginAdapter;
+import org.mybatis.generator.api.dom.DefaultJavaFormatter;
+import org.mybatis.generator.api.dom.java.Field;
+import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
+import org.mybatis.generator.api.dom.java.JavaVisibility;
+import org.mybatis.generator.api.dom.java.TopLevelClass;
+import org.mybatis.generator.internal.util.JavaBeansUtil;
+import org.mybatis.generator.internal.util.StringUtility;
 
 public class CustomDTOPlugin extends PluginAdapter {
     private boolean hasLombok = false;
