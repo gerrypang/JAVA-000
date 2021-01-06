@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gerry.pang.order.mapper.TbOrderProductRelationMapper">
+  <resultMap id="BaseResultMap" type="com.gerry.pang.order.entity.TbOrderProductRelation">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="order_id" jdbcType="INTEGER" property="orderId" />
+    <result column="product_id" jdbcType="INTEGER" property="productId" />
+    <result column="num" jdbcType="INTEGER" property="num" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+    <result column="version" jdbcType="INTEGER" property="version" />
+  </resultMap>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_order_product_relation
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="com.gerry.pang.order.entity.TbOrderProductRelation">
+    insert into tb_order_product_relation (id, order_id, product_id, num,
+      create_time, update_time, is_deleted, 
+      version)
+    values (
+    	#{id,jdbcType=INTEGER}, 
+    	#{orderId,jdbcType=INTEGER}, 
+    	#{productId,jdbcType=INTEGER}, 
+    	#{num,jdbcType=INTEGER}, 
+        #{createTime,jdbcType=TIMESTAMP}, 
+        #{updateTime,jdbcType=TIMESTAMP}, 
+        #{isDeleted,jdbcType=BIT}, 
+        #{version,jdbcType=INTEGER})
+  </insert>
+  
+  <update id="updateByPrimaryKey" parameterType="com.gerry.pang.order.entity.TbOrderProductRelation">
+    update tb_order_product_relation
+     set 
+      order_id = #{orderId, jdbcType=INTEGER},
+      product_id = #{productId, jdbcType=INTEGER},
+      num = #{num, jdbcType=INTEGER},
+      create_time = #{createTime, jdbcType=TIMESTAMP},
+      update_time = #{updateTime, jdbcType=TIMESTAMP},
+      is_deleted = #{isDeleted, jdbcType=BIT},
+      version = #{version, jdbcType=INTEGER}
+    where id = #{id, jdbcType=INTEGER}
+  </update>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, order_id, product_id, num, create_time, update_time, is_deleted, version
+    from tb_order_product_relation
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, order_id, product_id, num, create_time, update_time, is_deleted, version
+    from tb_order_product_relation
+  </select>
+</mapper>

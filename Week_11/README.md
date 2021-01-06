@@ -1,5 +1,10 @@
 # Week11 作业题目 
 
+第9周 作业已补交，麻烦老师看一下
+
+https://github.com/gerrypang/JAVA-000/blob/main/Week_09/README.md
+
+
 1. （选做）命令行下练习操作 Redis 的各种基本数据结构和命令。
 
 2. （选做）分别基于 jedis，RedisTemplate，Lettuce，Redission 实现 redis 基本操作的 demo，可以使用 spring-boot 集成上述工具。
