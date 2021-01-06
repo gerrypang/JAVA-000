@@ -1,5 +1,6 @@
 package com.gerry.pang.order.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -7,6 +8,11 @@ import java.util.concurrent.TimeUnit;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.scripting.support.ResourceScriptSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
@@ -16,8 +22,10 @@ import com.alibaba.fastjson.JSON;
 import com.gerry.pang.order.dto.TbOrderDTO;
 import com.gerry.pang.order.dto.TbOrderProductRelationDTO;
 import com.gerry.pang.order.entity.TbOrder;
+import com.gerry.pang.order.entity.TbProduct;
 import com.gerry.pang.order.enums.OrderStatusEnum;
 import com.gerry.pang.order.mapper.TbOrderMapper;
+import com.gerry.pang.order.mapper.TbProductMapper;
 import com.gerry.pang.order.service.OrderService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -28,18 +36,22 @@ public class OrderServiceImpl implements OrderService {
 
 	@Autowired
 	private TbOrderMapper orderMapper;
-
 	/** 分布式锁key */
 	public final static String REDISSION_LOCK_NAME = "order:%s";
-
-	@Autowired
-	private RedissonClient redissonClient;
-
 	@Autowired
 	private PlatformTransactionManager transactionManager;
 	@Autowired
 	private TransactionDefinition transactionDefinition;
-
+	@Autowired
+	private RedissonClient redissonClient;
+	
+	@Autowired
+	private RedisTemplate<String, Object> redisTemplate;
+	@Autowired
+	private TbProductMapper productMapper;
+	/** 分布式锁key */
+	public final static String PRODUCT_KEY = "order:proudct:%s";
+	
 	/**
 	 * 使用 redisson 中的 RLock 作为分布式锁 通过手工控制事务缩短事务范围，提升锁性能
 	 */
@@ -101,11 +113,59 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public Boolean payOrder(TbOrderProductRelationDTO orderProductRelationDTO) {
-		// 获取库存加在在 redis
-		
-		return null;
+	public Long payOrder(TbOrderProductRelationDTO orderProductRelationDTO) {
+		return planA(orderProductRelationDTO);
+//		return planB(orderProductRelationDTO);
 	}
 
+	/**
+	 * plan A : 非原子性操作，简单版 
+	 */
+	private Long planA(TbOrderProductRelationDTO orderProductRelationDTO) {
+		Long num = null;
+		Integer productId = orderProductRelationDTO.getProductId();
+		TbProduct product = productMapper.selectByPrimaryKey(productId);
+		if (product.getStoreNum() <= 0) {
+			throw new IllegalArgumentException("商品已售完");
+		}
+		final String pKey = String.format(PRODUCT_KEY, productId);
+		num = (Long) redisTemplate.boundValueOps(pKey).get();
+		if (num == null) {
+			redisTemplate.boundValueOps(pKey).set(product.getStoreNum().intValue());
+		} else {
+			if (num.intValue() > 1) {
+				num = redisTemplate.boundValueOps(pKey).decrement();
+			}
+		}
+		return num;
+	}
+
+	/**
+	 * plan A : 原子操作，使用lua脚本 
+	 */
+	private Long planB(TbOrderProductRelationDTO orderProductRelationDTO) {
+		Long num = null;
+		Integer productId = orderProductRelationDTO.getProductId();
+		TbProduct product = productMapper.selectByPrimaryKey(productId);
+		if (product.getStoreNum() <= 0) {
+			throw new IllegalArgumentException("商品已售完");
+		}
+		final String pKey = String.format(PRODUCT_KEY, productId);
+		if (!redisTemplate.hasKey(pKey)) {
+			redisTemplate.boundValueOps(pKey).set(product.getStoreNum().intValue());
+		} 
+		
+		// 脚本里的KEYS参数
+        List<String> keys = new ArrayList<>(1);
+        keys.add(pKey);
+        List<String> args = new ArrayList<>(1);
+        args.add(Integer.toString(product.getStoreNum()));
+        
+        DefaultRedisScript<String> redisScript = new DefaultRedisScript<String>();
+        redisScript.setResultType(String.class);
+        redisScript.setScriptSource(new ResourceScriptSource(new ClassPathResource("product_sub.lua")));
+        redisTemplate.execute(redisScript, new StringRedisSerializer(), new StringRedisSerializer(), keys, args);
+		return num;
+	}
 
 }

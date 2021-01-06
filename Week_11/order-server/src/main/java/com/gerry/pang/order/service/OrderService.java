@@ -8,7 +8,7 @@ import com.gerry.pang.order.entity.TbOrder;
 
 public interface OrderService {
 	
-	public Boolean payOrder(TbOrderProductRelationDTO orderProductRelationDTO);
+	public Long payOrder(TbOrderProductRelationDTO orderProductRelationDTO);
 
 	public String createOrder(TbOrderDTO orderDTO);
 
