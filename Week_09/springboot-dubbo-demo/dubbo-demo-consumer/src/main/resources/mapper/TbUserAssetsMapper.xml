@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.kimmking.dubbo.demo.consumer.mapper.TbUserAssetsMapper">
+
+  <resultMap id="BaseResultMap" type="io.kimmking.dubbo.demo.consumer.entity.TbUserAssets">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_account" jdbcType="VARCHAR" property="userAccount" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="assets_type" jdbcType="VARCHAR" property="assetsType" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="version" jdbcType="INTEGER" property="version" />
+    <result column="deleted" jdbcType="BIT" property="deleted" />
+  </resultMap>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_user_assets
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="io.kimmking.dubbo.demo.consumer.entity.TbUserAssets">
+    insert into tb_user_assets (id, user_account, username, assets_type, 
+      amount, create_time, update_time, 
+      version, deleted)
+    values (#{id,jdbcType=INTEGER}, #{user_account,jdbcType=INTEGER}, 
+      #{username,jdbcType=VARCHAR}, #{assetsType,jdbcType=VARCHAR}, 
+      #{amount,jdbcType=DECIMAL}, now(), now(), 0, 0)
+  </insert>
+  
+  <update id="updateByUserAccount" parameterType="io.kimmking.dubbo.demo.consumer.entity.TbUserAssets">
+    update tb_user_assets
+    set username = #{username,jdbcType=VARCHAR},
+      assets_type = #{assetsType,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      version = #{version,jdbcType=INTEGER} + 1,
+      deleted = #{deleted,jdbcType=BIT}
+    where user_account = #{user_account, jdbcType=INTEGER} and version=#{version};  
+  </update>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, user_account, username, assets_type, amount, create_time, update_time, version, deleted
+    from tb_user_assets
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, user_account, username, assets_type, amount, create_time, update_time, version, deleted
+    from tb_user_assets
+  </select>
+  
+  <select id="selectByCondition" resultMap="BaseResultMap" parameterType="io.kimmking.dubbo.demo.consumer.entity.TbUserAssets" >
+    SELECT 
+    	id, user_account, username, assets_type, amount, create_time, update_time, version, deleted
+    FROM tb_user_assets
+    <where> 1 = 1 
+   		AND	user_account = #{userAccount}
+    	<if test="username != null and username != '' ">
+    		AND	username = #{username}
+    	</if>
+    	<if test="assetsType != null and assetsType != '' ">
+    		AND	assets_type = #{assetsType}
+    	</if>
+   		AND	deleted = 0
+    </where>
+  </select>
+  
+</mapper>

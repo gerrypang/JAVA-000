@@ -6,7 +6,7 @@ spring:
     name: dubbo-demo-provider
     
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/order_db?useSSL=false&useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=UTC
+    url: jdbc:mysql://127.0.0.1:3306/bank_db_01?useSSL=false&useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=UTC
     username: root
     password: 
     # 8.x版本的MySQL JDBC驱动类为com.mysql.cj.jdbc.Driver
@@ -54,7 +54,7 @@ dubbo:
 # mybatis 基本配置
 mybatis:
   # 配置Java类型包名
-  type-aliases-package: com.gerry.pang.order.entity
+  type-aliases-package: io.kimmking.dubbo.demo.provider.entity
   # 注册XML映射器
   mapper-locations: classpath:mapper/**/*.xml,classpath*:/io/kimmking/doubbo/**/**mapper/*.xml
   configuration:
@@ -66,7 +66,7 @@ mybatis:
   # 指定MyBatis运行参数配置文件位置                            
   # config-location: classpath:/mybatis-config.xml
   # 配置类型处理器包名          
-  type-handlers-package: com.gerry.pang.order.handlers
+  #type-handlers-package: com.gerry.pang.order.handlers
   # 指定执行器类型         
   executor-type: SIMPLE
   

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.kimmking.dubbo.demo.provider.mapper.TbFrozenAssetsMapper">
+  <resultMap id="BaseResultMap" type="io.kimmking.dubbo.demo.provider.entity.TbFrozenAssets">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_account" jdbcType="VARCHAR" property="userAccount" />
+    <result column="assets_type" jdbcType="VARCHAR" property="assetsType" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="asset_status" jdbcType="TINYINT" property="assetStatus" />
+    <result column="frozen_time" jdbcType="TIMESTAMP" property="frozenTime" />
+    <result column="unfrozen_time" jdbcType="TIMESTAMP" property="unfrozenTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="version" jdbcType="INTEGER" property="version" />
+    <result column="deleted" jdbcType="BIT" property="deleted" />
+  </resultMap>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_frozen_assets
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="io.kimmking.dubbo.demo.provider.entity.TbFrozenAssets">
+    insert into tb_frozen_assets (id, user_account, assets_type, 
+      amount, asset_status, frozen_time, 
+      unfrozen_time, create_time, update_time, 
+      version, deleted)
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}, #{assetsType,jdbcType=VARCHAR}, 
+      #{amount,jdbcType=DECIMAL}, #{assetStatus,jdbcType=TINYINT}, #{frozenTime,jdbcType=TIMESTAMP}, 
+      #{unfrozenTime,jdbcType=TIMESTAMP}, now(), now(), 0, 0)
+  </insert>
+  
+  <update id="updateByPrimaryKey" parameterType="io.kimmking.dubbo.demo.provider.entity.TbFrozenAssets">
+    update tb_frozen_assets
+    set user_account = #{user_account,jdbcType=VARCHAR},
+      assets_type = #{assetsType,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=DECIMAL},
+      asset_status = #{assetStatus,jdbcType=TINYINT},
+      frozen_time = #{frozenTime,jdbcType=TIMESTAMP},
+      unfrozen_time = #{unfrozenTime,jdbcType=TIMESTAMP},
+      update_time = NOW(),
+      version = #{version,jdbcType=INTEGER} + 1,
+      deleted = #{deleted,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER} and version = #{version,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByCondition" parameterType="io.kimmking.dubbo.demo.provider.entity.TbFrozenAssets">
+    update tb_frozen_assets
+    set assets_type = #{assetsType,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=DECIMAL},
+      asset_status = #{assetStatus,jdbcType=TINYINT},
+      frozen_time = #{frozenTime,jdbcType=TIMESTAMP},
+      unfrozen_time = #{unfrozenTime,jdbcType=TIMESTAMP},
+      update_time = NOW(),
+      version = #{version,jdbcType=INTEGER} + 1,
+      deleted = #{deleted,jdbcType=BIT}
+    where user_account = #{userAccount,jdbcType=INTEGER} 
+    	and asset_status = #{assetStatus, jdbcType=TINYINT},
+    	and version = #{version,jdbcType=INTEGER}
+  </update>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, user_account, assets_type, amount, asset_status, frozen_time, unfrozen_time, 
+    create_time, update_time, version, deleted
+    from tb_frozen_assets
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, user_account, assets_type, amount, asset_status, frozen_time, unfrozen_time, 
+    create_time, update_time, version, deleted
+    from tb_frozen_assets
+  </select>
+  
+  <select id="selectByCondition" resultMap="BaseResultMap">
+    SELECT id, user_account, assets_type, amount, asset_status, frozen_time, unfrozen_time, 
+    create_time, update_time, version, deleted
+    FROM tb_frozen_assets
+    <where> 1 = 1
+    	<if test="userAccount != null">
+    		AND user_account = #{userAccount}
+    	</if>
+    	<if test="assetsType != null and assetsType != '' ">
+    		AND assets_type = #{assetsType}
+    	</if>
+    	<if test="assetStatus != null">
+    		AND asset_status = #{assetStatus}
+    	</if>
+    	deleted = 0
+    </where>
+  </select>
+</mapper>

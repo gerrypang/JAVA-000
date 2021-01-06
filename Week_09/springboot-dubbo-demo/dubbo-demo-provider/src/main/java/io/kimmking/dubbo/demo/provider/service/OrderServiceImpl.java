@@ -21,8 +21,11 @@ public class OrderServiceImpl implements OrderService {
 	public void payOrder(int id) {
 		System.out.println(">>>>> payOrder ======" + id);
 		Random random = new Random();
-		if (random.nextInt(3) / 2 > 0) {
+		if (random.nextInt(5) % 2 == 0) {
 			System.out.println("===== payOrder success ======");
+		} else {
+			System.out.println("===== payOrder error ======");
+			int a =	0 / 1 ;
 		}
 		System.out.println("<<<<< payOrder ======" + id);
 	}
