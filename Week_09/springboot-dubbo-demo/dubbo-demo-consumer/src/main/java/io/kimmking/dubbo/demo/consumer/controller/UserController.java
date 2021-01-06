@@ -2,6 +2,7 @@ package io.kimmking.dubbo.demo.consumer.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,7 +17,7 @@ public class UserController {
 	private UserAssetsService userAssetsService;
 
 	@PostMapping("/exchageTranscation")
-	public Boolean exchageTranscation(UserTransactionDTO userTransactionDTO) {
+	public Boolean exchageTranscation(@RequestBody UserTransactionDTO userTransactionDTO) {
 		Boolean result = userAssetsService.exchageTranscation(userTransactionDTO);
 		return result;
 	}

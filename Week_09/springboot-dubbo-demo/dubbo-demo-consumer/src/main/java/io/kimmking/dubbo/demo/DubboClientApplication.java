@@ -1,14 +1,19 @@
 package io.kimmking.dubbo.demo;
 
 import org.apache.dubbo.config.annotation.DubboReference;
+import org.dromara.hmily.spring.annotation.RefererAnnotationBeanPostProcessor;
+import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ImportResource;
 
 import io.kimmking.dubbo.demo.api.service.ForeginExchageTranscationService;
 import io.kimmking.dubbo.demo.api.service.OrderService;
 import io.kimmking.dubbo.demo.api.service.UserService;
 
 @SpringBootApplication
+//@ImportResource({"classpath:consumer.xml"})
 public class DubboClientApplication {
 	/**
 	 * hmily 和 dobbu 结合注意事项
@@ -29,4 +34,9 @@ public class DubboClientApplication {
 		SpringApplication.run(DubboClientApplication.class);
 		System.out.println("===== consumer server start success =====");
 	}
+	
+//	@Bean
+//	public BeanPostProcessor refererAnnotationBeanPostProcessor() {
+//	    return new RefererAnnotationBeanPostProcessor();
+//	}
 }

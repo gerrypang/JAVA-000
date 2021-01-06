@@ -8,6 +8,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.dromara.hmily.annotation.HmilyTCC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import io.kimmking.dubbo.demo.api.dto.UserTransactionDTO;
 import io.kimmking.dubbo.demo.api.service.ForeginExchageTranscationService;
@@ -30,9 +31,10 @@ public class UserAssetsServiceImpl implements UserAssetsService {
 	
 	@Autowired
 	private ForeginExchageTranscationService foreginExchageTranscationService;
-
-	@HmilyTCC(confirmMethod = "exchageTranscationConfirm", cancelMethod = "exchageTranscationCancle")
+	
 	@Override
+	@HmilyTCC(confirmMethod = "exchageTranscationConfirm", cancelMethod = "exchageTranscationCancle")
+	@Transactional(rollbackFor = Exception.class)
 	public Boolean exchageTranscation(UserTransactionDTO userTransactionDTO) {
 		boolean result = false;
 		log.info(">>>>> exchageTranscation start ");
@@ -41,14 +43,12 @@ public class UserAssetsServiceImpl implements UserAssetsService {
 		final BigDecimal fromAmount = userTransactionDTO.getFromAmount();
 		
 		// 查找账号是否存在
-		TbUserAssets userAssets = userAssetsMapper.selectByPrimaryKey(fromUserAccount);
-		if (userAssets == null) {
+		List<TbUserAssets> user = userAssetsMapper.selectByCondition(TbUserAssets.builder().userAccount(fromUserAccount).build());
+		if (CollectionUtils.isEmpty(user)) {
 			String errMsg = String.format("用户%d不存在", fromUserAccount);
 			log.error(errMsg);
 			throw new IllegalArgumentException(errMsg);
 		}
-
-		// 查看查看金额是否满足
 		List<TbUserAssets> userAssetsList = userAssetsMapper.selectByCondition(TbUserAssets.builder().userAccount(fromUserAccount).assetsType(fromAssetsType).build());
 		if (CollectionUtils.isEmpty(userAssetsList)) {
 			String errMsg = String.format("用户%d资产%s为0", fromUserAccount, fromAssetsType);
@@ -58,13 +58,14 @@ public class UserAssetsServiceImpl implements UserAssetsService {
 		
 		TbUserAssets oneTypeUserAssets = userAssetsList.get(0);
 		if (oneTypeUserAssets.getAmount().compareTo(fromAmount) < 0) {
-			String errMsg = String.format("用户%d资产%s小于%d", fromUserAccount, fromAssetsType, fromAmount.doubleValue());
+			String errMsg = String.format("用户%d资产%s小于%f", fromUserAccount, fromAssetsType, fromAmount.floatValue());
 			log.error(errMsg);
 			throw new IllegalArgumentException(errMsg);
-		} 
+		}
 		
 		// 冻结金额
-		TbFrozenAssets frozenAssets = TbFrozenAssets.builder().userAccount(fromUserAccount).assetStatus(0).amount(fromAmount).frozenTime(new Date()).build();
+		TbFrozenAssets frozenAssets = TbFrozenAssets.builder().userAccount(fromUserAccount).assetsType(fromAssetsType)
+				.assetStatus(0).amount(fromAmount).frozenTime(new Date()).build();
 		frozenAssetsMapper.insert(frozenAssets);
 		
 		// from 账户减 amount
@@ -78,7 +79,7 @@ public class UserAssetsServiceImpl implements UserAssetsService {
 		return result;
 	}
 
-	public void exchageTranscationConfirm(UserTransactionDTO userTransactionDTO) {
+	public Boolean exchageTranscationConfirm(UserTransactionDTO userTransactionDTO) {
 		log.info("===== transactionConfirm ===== ");
 		final Integer fromUserAccount = userTransactionDTO.getFromUserAccount();
 		final String fromAssetsType = userTransactionDTO.getFromAssetsType();
@@ -93,7 +94,7 @@ public class UserAssetsServiceImpl implements UserAssetsService {
 			// 解冻
 			n.setAssetStatus(1);
 			n.setUnfrozenTime(new Date());
-			frozenAssetsMapper.updateByCondition(n);
+			frozenAssetsMapper.unfrozenAssets(n);
 		});
 
 		// 更新账号金额
@@ -113,9 +114,10 @@ public class UserAssetsServiceImpl implements UserAssetsService {
 					.amount(toAmount).build();
 			userAssetsMapper.insert(newUserAssets);
 		}
+		return true;
 	}
 
-	public void exchageTranscationCancle(UserTransactionDTO userTransactionDTO) {
+	public Boolean exchageTranscationCancle(UserTransactionDTO userTransactionDTO) {
 		log.info("===== transactionCancle ===== ");
 		final Integer fromUserAccount = userTransactionDTO.getFromUserAccount();
 		final String fromAssetsType = userTransactionDTO.getFromAssetsType();
@@ -127,7 +129,7 @@ public class UserAssetsServiceImpl implements UserAssetsService {
 			// 解冻
 			n.setAssetStatus(1);
 			n.setUnfrozenTime(new Date());
-			frozenAssetsMapper.updateByCondition(n);
+			frozenAssetsMapper.unfrozenAssets(n);
 		});
 		
 		// 恢复账号金额
@@ -138,6 +140,7 @@ public class UserAssetsServiceImpl implements UserAssetsService {
 				userAssetsMapper.updateByUserAccount(n);
 			});
 		}
+		return true;
 	}
 
 }

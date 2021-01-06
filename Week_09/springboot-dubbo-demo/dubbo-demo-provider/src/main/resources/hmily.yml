@@ -26,7 +26,7 @@ hmily:
 repository:
   database:
     driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/hmily?useSSL=false&useUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://127.0.0.1:4406/hmily?useSSL=false&useUnicode=true&characterEncoding=utf8
     username: root
     password: 
     maxActive: 20

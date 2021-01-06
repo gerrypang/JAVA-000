@@ -10,4 +10,9 @@ public class DubboServerApplication {
 		SpringApplication.run(DubboServerApplication.class, args);
 		System.out.println("===== provicer server start success =====");
 	}
+	
+//	@Bean
+//	public BeanPostProcessor refererAnnotationBeanPostProcessor() {
+//	    return new RefererAnnotationBeanPostProcessor();
+//	}
 }

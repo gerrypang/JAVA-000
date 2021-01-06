@@ -25,4 +25,6 @@ public interface TbFrozenAssetsMapper {
     int updateByPrimaryKey(TbFrozenAssets record);
 
     int updateByCondition(TbFrozenAssets record);
+
+    int unfrozenAssets(TbFrozenAssets record);
 }

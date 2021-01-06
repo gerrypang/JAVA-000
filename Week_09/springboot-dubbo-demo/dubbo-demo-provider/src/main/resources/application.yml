@@ -6,7 +6,7 @@ spring:
     name: dubbo-demo-provider
     
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/bank_db_01?useSSL=false&useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=UTC
+    url: jdbc:mysql://127.0.0.1:4406/bank_db_02?useSSL=false&useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=UTC
     username: root
     password: 
     # 8.x版本的MySQL JDBC驱动类为com.mysql.cj.jdbc.Driver

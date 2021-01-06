@@ -21,12 +21,15 @@
   </delete>
   
   <insert id="insert" parameterType="io.kimmking.dubbo.demo.provider.entity.TbFrozenAssets">
-    insert into tb_frozen_assets (id, user_account, assets_type, 
+    insert into tb_frozen_assets (user_account, assets_type, 
       amount, asset_status, frozen_time, 
-      unfrozen_time, create_time, update_time, 
-      version, deleted)
-    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}, #{assetsType,jdbcType=VARCHAR}, 
-      #{amount,jdbcType=DECIMAL}, #{assetStatus,jdbcType=TINYINT}, #{frozenTime,jdbcType=TIMESTAMP}, 
+      unfrozen_time, create_time, update_time, version, deleted)
+    values (
+      #{userAccount,jdbcType=VARCHAR}, 
+      #{assetsType,jdbcType=VARCHAR}, 
+      #{amount,jdbcType=DECIMAL}, 
+      #{assetStatus,jdbcType=TINYINT}, 
+      #{frozenTime,jdbcType=TIMESTAMP}, 
       #{unfrozenTime,jdbcType=TIMESTAMP}, now(), now(), 0, 0)
   </insert>
   
@@ -55,8 +58,22 @@
       version = #{version,jdbcType=INTEGER} + 1,
       deleted = #{deleted,jdbcType=BIT}
     where user_account = #{userAccount,jdbcType=INTEGER} 
-    	and asset_status = #{assetStatus, jdbcType=TINYINT},
+    	and asset_status = #{assetStatus, jdbcType=TINYINT}
     	and version = #{version,jdbcType=INTEGER}
+  </update>
+
+  <update id="unfrozenAssets" parameterType="io.kimmking.dubbo.demo.provider.entity.TbFrozenAssets">
+    update tb_frozen_assets
+    set assets_type = #{assetsType,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=DECIMAL},
+      asset_status = #{assetStatus,jdbcType=TINYINT},
+      unfrozen_time = #{unfrozenTime,jdbcType=TIMESTAMP},
+      update_time = NOW(),
+      version = #{version,jdbcType=INTEGER} + 1
+    where user_account = #{userAccount,jdbcType=INTEGER} 
+    	and asset_status = 0
+    	and version = #{version,jdbcType=INTEGER}
+    	and deleted = 0
   </update>
   
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
@@ -73,8 +90,10 @@
   </select>
   
   <select id="selectByCondition" resultMap="BaseResultMap">
-    SELECT id, user_account, assets_type, amount, asset_status, frozen_time, unfrozen_time, 
-    create_time, update_time, version, deleted
+    SELECT 
+    	id, user_account, assets_type, amount, asset_status, 
+    	frozen_time, unfrozen_time, 
+    	create_time, update_time, version, deleted
     FROM tb_frozen_assets
     <where> 1 = 1
     	<if test="userAccount != null">
@@ -83,10 +102,13 @@
     	<if test="assetsType != null and assetsType != '' ">
     		AND assets_type = #{assetsType}
     	</if>
+    	<if test="amount != null ">
+    		AND amount = #{amount}
+    	</if>
     	<if test="assetStatus != null">
     		AND asset_status = #{assetStatus}
     	</if>
-    	deleted = 0
+    	AND deleted = 0
     </where>
   </select>
 </mapper>

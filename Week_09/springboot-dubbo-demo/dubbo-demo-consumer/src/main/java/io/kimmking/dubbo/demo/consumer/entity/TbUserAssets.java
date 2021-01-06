@@ -49,6 +49,11 @@ public class TbUserAssets implements Serializable {
      * 数据更新时间
      */
     private Date updateTime;
+    
+    /**
+     * 数据创建时间
+     */
+    private Date createTime;
 
     /**
      * 数据逻辑删除

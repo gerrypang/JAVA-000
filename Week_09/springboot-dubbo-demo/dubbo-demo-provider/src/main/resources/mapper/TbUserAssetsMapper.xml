@@ -17,9 +17,10 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="io.kimmking.dubbo.demo.provider.entity.TbUserAssets">
-    insert into tb_user_assets (id, user_account, username, assets_type, 
+    insert into tb_user_assets (user_account, username, assets_type, 
       amount, create_time, update_time, version, deleted)
-    values (#{id,jdbcType=INTEGER}, #{user_account,jdbcType=INTEGER}, 
+    values (
+	  #{userAccount,jdbcType=INTEGER}, 
       #{username,jdbcType=VARCHAR}, #{assetsType,jdbcType=VARCHAR}, 
       #{amount,jdbcType=DECIMAL}, now(), now(), 0, 0)
   </insert>
@@ -29,11 +30,10 @@
     set username = #{username,jdbcType=VARCHAR},
       assets_type = #{assetsType,jdbcType=VARCHAR},
       amount = #{amount,jdbcType=DECIMAL},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_time = now(),
       version = #{version,jdbcType=INTEGER} + 1,
       deleted = #{deleted,jdbcType=BIT}
-    where user_account = #{user_account, jdbcType=INTEGER} and version=#{version};  
+    where user_account = #{userAccount, jdbcType=INTEGER} and version=#{version};  
   </update>
   
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
