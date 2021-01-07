@@ -41,9 +41,9 @@ public class StoreController {
 		return orderService.createOrder(orderDTO);
 	}
 	
-	@GetMapping("/payOrder")
+	@PostMapping("/payOrder")
 	@ApiOperation("查询全量订单列表")
-	public Long payOrder(TbOrderProductRelationDTO orderProductRelationDTO) {
+	public Long payOrder(@RequestBody TbOrderProductRelationDTO orderProductRelationDTO) {
 		log.info("===> get store sccuess ");
 		return orderService.payOrder(orderProductRelationDTO);
 	}

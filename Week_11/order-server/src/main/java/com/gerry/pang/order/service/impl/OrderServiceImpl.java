@@ -1,6 +1,7 @@
 package com.gerry.pang.order.service.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -114,8 +115,8 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public Long payOrder(TbOrderProductRelationDTO orderProductRelationDTO) {
-		return planA(orderProductRelationDTO);
-//		return planB(orderProductRelationDTO);
+		//return planA(orderProductRelationDTO);
+		return planB(orderProductRelationDTO);
 	}
 
 	/**
@@ -129,13 +130,17 @@ public class OrderServiceImpl implements OrderService {
 			throw new IllegalArgumentException("商品已售完");
 		}
 		final String pKey = String.format(PRODUCT_KEY, productId);
-		num = (Long) redisTemplate.boundValueOps(pKey).get();
-		if (num == null) {
+		Object cache = redisTemplate.boundValueOps(pKey).get();
+		if (cache == null) {
 			redisTemplate.boundValueOps(pKey).set(product.getStoreNum().intValue());
 		} else {
-			if (num.intValue() > 1) {
+			log.info("==> cache:" + cache);
+			Integer storeNumCahe = (Integer) cache;
+			if (storeNumCahe.intValue() > 1) {
 				num = redisTemplate.boundValueOps(pKey).decrement();
 			}
+			// TODO 好像有一个坑，desc到1 之后再减就不再执行了
+			log.info("==> num:" + num);
 		}
 		return num;
 	}
@@ -156,15 +161,16 @@ public class OrderServiceImpl implements OrderService {
 		} 
 		
 		// 脚本里的KEYS参数
-        List<String> keys = new ArrayList<>(1);
+        List<String> keys =new ArrayList<>();
         keys.add(pKey);
-        List<String> args = new ArrayList<>(1);
-        args.add(Integer.toString(product.getStoreNum()));
+        //Arrays.asList(pKey);
+        List<String> args = Arrays.asList(Integer.toString(product.getStoreNum()));
         
-        DefaultRedisScript<String> redisScript = new DefaultRedisScript<String>();
-        redisScript.setResultType(String.class);
-        redisScript.setScriptSource(new ResourceScriptSource(new ClassPathResource("product_sub.lua")));
-        redisTemplate.execute(redisScript, new StringRedisSerializer(), new StringRedisSerializer(), keys, args);
+        DefaultRedisScript<Integer> redisScript = new DefaultRedisScript<>();
+        redisScript.setResultType(Integer.class);
+		redisScript.setScriptSource(new ResourceScriptSource(new ClassPathResource("product_sub.lua")));
+		Integer result = redisTemplate.execute(redisScript, keys, args);
+		log.info("lua 执行结果:{}", result);
 		return num;
 	}
 
