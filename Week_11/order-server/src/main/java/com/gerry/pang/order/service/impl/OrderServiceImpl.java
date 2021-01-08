@@ -11,9 +11,7 @@ import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.core.script.RedisScript;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
@@ -122,6 +120,7 @@ public class OrderServiceImpl implements OrderService {
 	/**
 	 * plan A : 非原子性操作，简单版 
 	 */
+	@SuppressWarnings("unused")
 	private Long planA(TbOrderProductRelationDTO orderProductRelationDTO) {
 		Long num = null;
 		Integer productId = orderProductRelationDTO.getProductId();
