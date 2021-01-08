@@ -2,6 +2,12 @@
 
 1. （必做）配置 redis 的主从复制，sentinel 高可用，Cluster 集群。
 
+- [主从复制]() 未完成占个坑！！！
+
+- [sentinel 高可用]() 未完成占个坑！！！
+
+- [Cluster 集群](/Week_12/cluster/README.md)
+
 2. （选做）练习示例代码里下列类中的作业题:
 08cache/redis/src/main/java/io/kimmking/cache/RedisApplication.java
 
