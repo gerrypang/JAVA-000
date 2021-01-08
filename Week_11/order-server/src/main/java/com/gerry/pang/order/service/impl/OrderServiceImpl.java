@@ -1,7 +1,7 @@
 package com.gerry.pang.order.service.impl;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -12,8 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
+import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
-import org.springframework.scripting.support.ResourceScriptSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
@@ -157,19 +157,14 @@ public class OrderServiceImpl implements OrderService {
 		}
 		final String pKey = String.format(PRODUCT_KEY, productId);
 		if (!redisTemplate.hasKey(pKey)) {
-			redisTemplate.boundValueOps(pKey).set(product.getStoreNum().intValue());
+			redisTemplate.boundValueOps(pKey).set(product.getStoreNum()+"");
 		} 
 		
 		// 脚本里的KEYS参数
-        List<String> keys =new ArrayList<>();
-        keys.add(pKey);
-        //Arrays.asList(pKey);
-        List<String> args = Arrays.asList(Integer.toString(product.getStoreNum()));
-        
-        DefaultRedisScript<Integer> redisScript = new DefaultRedisScript<>();
-        redisScript.setResultType(Integer.class);
-		redisScript.setScriptSource(new ResourceScriptSource(new ClassPathResource("product_sub.lua")));
-		Integer result = redisTemplate.execute(redisScript, keys, args);
+        // The script resultType should be one of Long, Boolean, List, or a deserialized value type. 
+        RedisScript<Long> redisScript = RedisScript.of(new ClassPathResource("product_sub.lua"), Long.class);
+        // lua 执行需要注意入参和结果的序列化方式，尽量设置成String，参数不要使用包装的list，可以使用数组
+        Long result = redisTemplate.execute(redisScript, Collections.singletonList(pKey), Arrays.asList(orderProductRelationDTO.getNum()+"").toArray());
 		log.info("lua 执行结果:{}", result);
 		return num;
 	}
