@@ -50,6 +50,8 @@ public class OrderServiceImpl implements OrderService {
 	private TbProductMapper productMapper;
 	/** 分布式锁key */
 	public final static String PRODUCT_KEY = "order:proudct:%s";
+	/** 分布式锁key */
+	public final static String CHANNEL_NAME = "PAY_ORDER";
 	
 	/**
 	 * 使用 redisson 中的 RLock 作为分布式锁 通过手工控制事务缩短事务范围，提升锁性能
@@ -113,17 +115,22 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public Long payOrder(TbOrderProductRelationDTO orderProductRelationDTO) {
+		log.info("====== 支付订单成功，准备扣减库存 ======");
 		//return planA(orderProductRelationDTO);
-		return planB(orderProductRelationDTO);
+		Long result = this.planB(orderProductRelationDTO);
+		log.info("====== 扣减库存成功，剩余库存：{} ======", result);
+		this.publishingOrderMessage(orderProductRelationDTO);
+		log.info("====== 发送消息通知下游服务 ======");
+		return result;
 	}
 
 	/**
 	 * plan A : 非原子性操作，简单版 
 	 */
 	@SuppressWarnings("unused")
-	private Long planA(TbOrderProductRelationDTO orderProductRelationDTO) {
+	private Long planA(TbOrderProductRelationDTO orderProductRelation) {
 		Long num = null;
-		Integer productId = orderProductRelationDTO.getProductId();
+		Integer productId = orderProductRelation.getProductId();
 		TbProduct product = productMapper.selectByPrimaryKey(productId);
 		if (product.getStoreNum() <= 0) {
 			throw new IllegalArgumentException("商品已售完");
@@ -147,9 +154,10 @@ public class OrderServiceImpl implements OrderService {
 	/**
 	 * plan A : 原子操作，使用lua脚本 
 	 */
-	private Long planB(TbOrderProductRelationDTO orderProductRelationDTO) {
+	@SuppressWarnings("unused")
+	private Long planB(TbOrderProductRelationDTO orderProductRelation) {
 		Long num = null;
-		Integer productId = orderProductRelationDTO.getProductId();
+		Integer productId = orderProductRelation.getProductId();
 		TbProduct product = productMapper.selectByPrimaryKey(productId);
 		if (product.getStoreNum() <= 0) {
 			throw new IllegalArgumentException("商品已售完");
@@ -163,9 +171,15 @@ public class OrderServiceImpl implements OrderService {
         // The script resultType should be one of Long, Boolean, List, or a deserialized value type. 
         RedisScript<Long> redisScript = RedisScript.of(new ClassPathResource("product_sub.lua"), Long.class);
         // lua 执行需要注意入参和结果的序列化方式，尽量设置成String，参数不要使用包装的list，可以使用数组
-        Long result = redisTemplate.execute(redisScript, Collections.singletonList(pKey), Arrays.asList(orderProductRelationDTO.getNum()+"").toArray());
-		log.info("lua 执行结果:{}", result);
+        num = redisTemplate.execute(redisScript, Collections.singletonList(pKey), Arrays.asList(orderProductRelation.getNum()+"").toArray());
+		log.info("lua 执行结果:{}", num);
 		return num;
 	}
 
+	private void publishingOrderMessage(TbOrderProductRelationDTO orderProductRelation) {
+		redisTemplate.convertAndSend(CHANNEL_NAME, JSON.toJSONString(orderProductRelation));
+	} 
+	
+	
+	
 }

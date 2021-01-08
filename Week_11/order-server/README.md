@@ -6,8 +6,9 @@
 
 
 ### 代码实现
-- 分布式锁： [StoreController.java 中 createOrder 接口](/Week_09/order-server/src/main/java/com/gerry/pang/order/controller/StoreController.java)
-- 减库存： [StoreController.java 中 payOrder 接口](/Week_09/order-server/src/main/java/com/gerry/pang/order/controller/StoreController.java)
+- 分布式锁： [StoreController.java 中 createOrder 接口](/Week_11/order-server/src/main/java/com/gerry/pang/order/controller/StoreController.java)
+
+- 减库存： [StoreController.java 中 payOrder 接口](/Week_11/order-server/src/main/java/com/gerry/pang/order/controller/StoreController.java)
 
 
 ### 调试lua 脚本执行

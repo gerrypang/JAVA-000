@@ -20,9 +20,11 @@ https://github.com/gerrypang/JAVA-000/blob/main/Week_09/README.md
     在 Java 中实现一个简单的分布式锁；
     在 Java 中实现一个分布式计数器，模拟减库存。
     
-- [Redis 封装分布式数据操作 demo](/Week_11/order-server/README.md)
+- [Redis 封装分布式数据操作Demo ](/Week_11/order-server/README.md)
 
 5. （必做）基于 Redis 的 PubSub 实现订单异步处理
+
+- [PubSub 实现订单异步Demo ](/Week_11/order-server/README2.md)
 
 6. （挑战☆）基于其他各类场景，设计并在示例代码中实现简单 demo：
 
