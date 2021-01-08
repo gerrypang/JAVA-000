@@ -1,9 +1,15 @@
 package com.gerry.pang.config;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.listener.PatternTopic;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
+import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
@@ -11,6 +17,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
+import com.gerry.pang.order.service.impl.OrderServiceImpl;
 
 /**
  * redisTemplate 配置类
@@ -44,4 +51,22 @@ public class RedisTemplateConfig {
 		return template;
 	}
 
+	
+	/**
+     * 配置主题订阅
+     * @param connectionFactory
+     * @param listenerAdapter
+     * @return
+     */
+    @Bean
+    public RedisMessageListenerContainer listenerContainer(RedisConnectionFactory connectionFactory, MessageListenerAdapter listenerAdapter) {
+        RedisMessageListenerContainer listenerContainer = new RedisMessageListenerContainer();
+        listenerContainer.setConnectionFactory(connectionFactory);
+        List<PatternTopic> topics = Arrays.asList(
+        		// 要监听的主题，字符串即可
+        		new PatternTopic(OrderServiceImpl.CHANNEL_NAME)
+        );
+        listenerContainer.addMessageListener(listenerAdapter, topics);
+        return listenerContainer;
+    }
 }
