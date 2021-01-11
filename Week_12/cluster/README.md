@@ -7,4 +7,5 @@
 
 
 ### 参考资料
+- https://redis.io/topics/cluster-tutorial
 - https://blog.csdn.net/Amor_Leo/article/details/85143011#Redis_3
