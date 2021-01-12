@@ -2,9 +2,9 @@
 
 1. （必做）配置 redis 的主从复制，sentinel 高可用，Cluster 集群。
 
-- [主从复制]() 未完成占个坑！！！
+- [主从复制](/Week_12/master-slave) 
 
-- [sentinel 高可用]() 未完成占个坑！！！
+- [sentinel 高可用](/Week_12/sentinel) 
 
 - [Cluster 集群](/Week_12/cluster)
 
