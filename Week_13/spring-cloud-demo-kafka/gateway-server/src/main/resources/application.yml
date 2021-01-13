@@ -1,0 +1,56 @@
+server: 
+  port: 9000                    
+
+spring:
+  cloud: 
+    gateway:
+      # 将网关配置为基于使用兼容DiscoveryClient注册中心注册的服务自动创建路由
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      httpclient:
+        # 全局超时时间，单位毫秒
+        connect-timeout: 1000
+        # java.time.Duration
+        response-timeout: 5s
+      routes: 
+#        - id: order-server-route
+#          # uri以lb://开头（lb代表从注册中心获取服务），后面接的就是你需要转发到的服务名称
+#          uri: lb://ORDER-SERVER
+#          predicates:
+#          - Path=/order-server/**, /order/**
+#          filters:
+#          - StripPrefix=1
+#          #- perfixPath=/product
+#          - RewritePath=/order/(?<segment>/?.*), $\{segment}
+#            
+#        - id: product-server-route
+#          uri: lb://PRODUCT-SERVER
+#          predicates:
+#          - Path=/product-server/**, /product/**
+#          filters:
+#          - StripPrefix=1
+#          #- perfixPath=/product
+#          - RewritePath=/product/(?<segment>/?.*), $\{segment}
+#          metadata:
+#            # 具体某个接口超时时间，单位毫秒
+#            response-timeout: 2000
+#            connect-timeout: 2000
+            
+hystrix.command.fallbackcmd.execution.isolation.thread.timeoutInMilliseconds: 5000
+
+# actuator端点允许监视          
+management:
+  endpoint:
+    gateway:
+      enabled: true
+  endpoints: 
+    web: 
+      exposure: 
+        include: gateway
+     
+# 配置日志级别，方别调试
+#logging:
+#  level:
+#    org.springframework.cloud.gateway: debug          

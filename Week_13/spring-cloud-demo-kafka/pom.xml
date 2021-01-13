@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.gerry.pang</groupId>
+	<artifactId>spring-cloud-demo</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>com.gerry.pang</name>
+	<description>spring-cloud-demo-hmliy</description>
+
+	<modules>
+		<module>discovery-server</module>
+		<module>order-server</module>
+		<module>product-server</module>
+		<module>gateway-server</module>
+	</modules>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.2.7.RELEASE</version>
+	</parent>
+
+	<properties>
+		<!-- base property -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+		
+		<!-- import package version -->
+		<spring-io.version>Cairo-SR7</spring-io.version>
+		<spring-cloud.version>Hoxton.SR4</spring-cloud.version>
+		<spring-cloud-openfeign.version>2.2.2.RELEASE</spring-cloud-openfeign.version>
+		<spring-session.version>Dragonfruit-RELEASE</spring-session.version>
+		<spring-social.version>1.1.6.RELEASE</spring-social.version>
+		<mysql.version>5.1.46</mysql.version>
+		<mybatis-spring-boot.version>2.1.0</mybatis-spring-boot.version>
+		<mybatis-generator-core.version>1.4.0</mybatis-generator-core.version>
+		<mybatis-pagehelper.version>1.2.4</mybatis-pagehelper.version>
+		<tk.mybatis-mapper.version>2.0.2</tk.mybatis-mapper.version>
+		<druid.version>1.1.20</druid.version>
+		<protobuf-java.version>3.11.0</protobuf-java.version>
+		<joda-money.version>1.0.1</joda-money.version>
+		<guava.version>29.0-jre</guava.version>
+		<apache.poi.version>3.16</apache.poi.version>
+		<common-io.version>2.6</common-io.version>
+		<commons-collections.version>3.2.2</commons-collections.version>
+		<commons-collections4.version>4.1</commons-collections4.version>
+		<commons-beanutils.version>1.9.4</commons-beanutils.version>
+		<fastjson.version>1.2.73</fastjson.version>
+		<hmily.version>2.1.1</hmily.version>
+		
+		<!-- self define package version -->
+		<gerry-pang-security.version>0.0.1-SNAPSHOT</gerry-pang-security.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<!-- Spring Cloud 的组件 -->
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+			<!-- Spring session 的组件 -->
+			<dependency>
+				<groupId>org.springframework.session</groupId>
+				<artifactId>spring-session-bom</artifactId>
+				<version>${spring-session.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+			<!-- Spring Cloud Alibaba 的组件 -->
+			<dependency>
+				<groupId>com.alibaba.cloud</groupId>
+				<artifactId>spring-cloud-alibaba-dependencies</artifactId>
+				<version>2.1.0.RELEASE</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+
+	</dependencyManagement>
+
+	<profiles>
+		<profile>
+			<!--不同环境Profile的唯一id -->
+			<id>dev</id>
+			<properties>
+				<!--profiles.active是自定义的字段（名字随便起），自定义字段可以有多个 -->
+				<profiles.active>dev</profiles.active>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+		<profile>
+			<id>test</id>
+			<properties>
+				<!--profiles.active是自定义的字段（名字随便起），自定义字段可以有多个 -->
+				<profiles.active>test</profiles.active>
+			</properties>
+		</profile>
+	</profiles>
+
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<!-- <version>3.1.1</version> -->
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+	
+</project>

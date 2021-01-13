@@ -1,0 +1,60 @@
+spring:
+  application:
+    name: order-server
+  # alibaba nacos 配置
+#  cloud:
+#    nacos:
+#      # 注册中心配置
+#      discovery:
+#        # 配置Nacos地址
+#        server-addr: localhost:8848
+#      # 配置中心配置
+#      config:
+#        # Nacos地址
+#        server-addr: localhost:8848
+#        # 这里我们获取的yaml格式的配置
+#        file-extension: yaml
+
+eureka: 
+  client: 
+    enabled: true
+    serviceUrl: 
+      defaultZone: http://localhost:8761/eureka/
+    # 调整注册信息的获取周期，默认值： 30秒
+    registryFetchIntervalSeconds: 5 
+  instance:
+    # Eureka注册实例id
+    instanceId: ${spring.application.name}:${server.port}  
+    # Eureka实例的状态页面
+    statusPageUrlPath: /info
+    # Eureka客户端应用实例状态 URL
+    healthCheckUrlPath: /health
+    prefer-ip-address: true
+    metadata-map: 
+      metadata: ${spring.application.name}
+
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        # hystrix监控暴露点
+#        include: ["hystrix-stream"]    
+        
+#feign:
+#  hystrix:
+#    enabled: true
+#  compression:
+#    request:
+#      enabled: true
+#      min-request-size: 2048
+#      mime-types:
+#      - application/json
+#      - application/xml
+#      - text/xml
+#    response:
+#      enabled: true    
+      
+      
+# swagger 配置
+swagger: 
+  enabled: false

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <!--mybatis targetRuntime选择 该测试需要MyBatis3DynamicSQL-->
+    <context id="dsql" targetRuntime="MyBatis3Simple">
+        <property name="beginningDelimiter" value="`"/>
+        <property name="endingDelimiter" value="`"/>
+        <property name="javaFileEncoding" value="UTF-8"/>
+
+        <plugin type="com.gerry.pang.generate.custom.CustomModelPlugin">
+            <property name="hasLombok" value="true"/>
+            <property name="generatorSerialVersionUID" value="true" />
+            <property name="ignoreFields" value="id,enabled,createTime,createBy,lastUpdateBy,lastUpdateTime" />
+            <!--<property name="extendsClass" value="com.yixin.yxcode.system.domain.BaseEntity" />-->
+            <property name="implementsClass" value="java.io.Serializable" />
+            <property name="addRemarkComments" value="true"/>
+            <property name="addSwaggerComments" value="true"/>
+            <property name="addJpaComments" value="true"/>
+        </plugin>
+        <plugin type="com.gerry.pang.generate.custom.CustomDTOPlugin">
+            <property name="targetPackage" value="com.gerry.pang.order.dto"/>
+            <property name="hasLombok" value="true"/>
+            <property name="generatorSerialVersionUID" value="true" />
+            <property name="ignoreFields" value="id,enabled,createTime,createBy,lastUpdateBy,lastUpdateTime" />
+            <!--<property name="extendsClass" value="com.yixin.yxcode.system.domain.BaseEntity" />-->
+            <property name="implementsClass" value="java.io.Serializable" />
+            <property name="addRemarkComments" value="true"/>
+            <property name="addSwaggerComments" value="true"/>
+        </plugin>
+
+
+        <commentGenerator>
+            <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+            <property name="suppressAllComments" value="true"/>
+            <property name="suppressDate" value="true"/>
+            <property name="addRemarkComments" value="true"/>
+        </commentGenerator>
+
+        <!--可以自定义生成model的代码注释-->
+        <!--<commentGenerator type="com.gerry.pang.generate.custom.CommentGenerator">-->
+            <!--&lt;!&ndash; 是否去除自动生成的注释 true：是 ： false:否 &ndash;&gt;-->
+            <!--<property name="suppressAllComments" value="true"/>-->
+            <!--<property name="suppressDate" value="true"/>-->
+            <!--<property name="addRemarkComments" value="true"/>-->
+            <!--<property name="addSwaggerComments" value="true"/>-->
+            <!--<property name="addJpaComments" value="true"/>-->
+        <!--</commentGenerator>-->
+
+        <!--数据库连接-->
+        <!-- mysql8以下 com.mysql.jdbc.Driver -->
+        <!-- mysql8 com.mysql.cj.jdbc.Driver -->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://127.0.0.1:3306/order_db?useSSL=false&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;useInformationSchema=true&amp;serverTimezone=UTC"
+                        userId="root" password=""/>
+
+        <!--类型解析器-->
+        <javaTypeResolver>
+            <!--是否对整型进行分类-->
+            <property name="forceBigDecimals" value="true"/>
+            <!--是否试用jdk8时间类-->
+            <property name="useJSR310Types" value="false"/>
+        </javaTypeResolver>
+
+        <!--java实体类生成配置-->
+        <javaModelGenerator targetPackage="com.gerry.pang.order.entity" targetProject="src\main\java">
+            <!--此属性用于选择MyBatis Generator是否将根据内省表的目录和架构为对象生成不同的Java包。-->
+            <property name="enableSubPackages" value="true"/>
+            <!--去除字段空格-->
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <!--对应的mapper.xml文件 -->
+        <sqlMapGenerator targetPackage="mapper" targetProject="src\main\resources">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
+        <!--mapper生成配置-->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.gerry.pang.order.mapper" targetProject="src\main\java">
+            <!-- 此属性用于选择MyBatis Generator是否将根据内省表的目录和架构为对象生成不同的Java包。 -->
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+        <!--数据表的选择-->
+		<table tableName="tb_order" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false" />
+	    <table tableName="tb_order_product_relation" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false" />
+
+    </context>
+</generatorConfiguration>
