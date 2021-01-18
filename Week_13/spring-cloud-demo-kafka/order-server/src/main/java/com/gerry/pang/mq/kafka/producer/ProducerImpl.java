@@ -26,13 +26,17 @@ public class ProducerImpl implements Producer {
 	private KafkaTopicProperties kafkaTopicProperties;
 	
 	@Autowired
-	private KafkaTemplate<String, String> kafkaTemplate;
+	private KafkaTemplate<String, String> stringKafkaTemplate;
+	@Autowired
+	private KafkaTemplate<String, Object> kafkaTemplate;
+	@Autowired
+	private KafkaTemplate<String, byte[]> byteArrayKafkaTemplate;
 	
 	@Override
 	public void send(Order order) {
-		final ProducerRecord<String, String> record = createRecord(order);
+		final ProducerRecord<String, Object> record = createRecord(order);
 		try {
-			SendResult<String, String> sendResult = kafkaTemplate.send(record).get(10, TimeUnit.SECONDS);
+			SendResult<String, Object> sendResult = kafkaTemplate.send(record).get(10, TimeUnit.SECONDS);
 			log.info("==> Sent ok: {}", sendResult.getRecordMetadata());
 		} catch (InterruptedException e) {
 			e.printStackTrace();
@@ -45,11 +49,11 @@ public class ProducerImpl implements Producer {
 	
 	@Override
 	public void sendAsync(Order order) {
-		final ProducerRecord<String, String> record = createRecord(order);
-		ListenableFuture<SendResult<String, String>> futureOfSend = kafkaTemplate.send(record);
-		futureOfSend.addCallback(new ListenableFutureCallback<SendResult<String, String>>() {
+		final ProducerRecord<String, Object> record = createRecord(order);
+		ListenableFuture<SendResult<String, Object>> futureOfSend = kafkaTemplate.send(record);
+		futureOfSend.addCallback(new ListenableFutureCallback<SendResult<String, Object>>() {
 			@Override
-			public void onSuccess(SendResult<String, String> result) {
+			public void onSuccess(SendResult<String, Object> result) {
 				log.info("==> onSuccess:{}", JSON.toJSONString(result));
 			}
 
@@ -60,8 +64,8 @@ public class ProducerImpl implements Producer {
 		});
 	}
 	
-	private ProducerRecord<String, String> createRecord(Order order) {
-		ProducerRecord<String, String> record = new ProducerRecord<>(kafkaTopicProperties.getOrder(), JSON.toJSONString(order));
+	private ProducerRecord<String, Object> createRecord(Order order) {
+		ProducerRecord<String, Object> record = new ProducerRecord<>(kafkaTopicProperties.getOrder(), order);
 		return record;
 	}
 

@@ -5,6 +5,7 @@ import java.util.Iterator;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.header.Header;
 import org.apache.kafka.common.header.Headers;
+import org.springframework.core.annotation.Order;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Service;
@@ -22,12 +23,12 @@ public class ConsumerImpl implements Consumer {
 		
 	}
 	
-	@KafkaListener(topics="${kafka.topic.order}")
-	public void receiveMessage(ConsumerRecord<String, String> record, Acknowledgment ack) {
-		log.info("receive a message from kafka server start");
+	@KafkaListener(topics="${kafka.topic.order}", clientIdPrefix = "string", containerFactory = "kafkaListenerStringContainerFactory")
+	public void receiveMessageString(ConsumerRecord<String, String> record, Acknowledgment ack) {
+		log.info("receive a message string start");
 
 		String receiveMessage = String.valueOf(record.value());
-		log.info("==> receive a message:{}", JSON.toJSONString(receiveMessage));
+		log.info("==> receive a message:{}", receiveMessage);
 		Headers headers = record.headers();
 		Iterator<Header> it = headers.iterator();
 		while (it.hasNext()) {
@@ -36,7 +37,22 @@ public class ConsumerImpl implements Consumer {
 		}
 		// 手动提交偏移量
 		ack.acknowledge();
-		log.info("receive a message from kafka server end");
+		log.info("receive a message string end");
+	}
+
+	@KafkaListener(topics="${kafka.topic.order}", clientIdPrefix = "json", containerFactory = "kafkaListenerContainerFactory")
+	public void receiveMessageJSON(ConsumerRecord<String, Order> record, Acknowledgment ack) {
+		log.info("receive a message json start ");
+		log.info("==> receive a message:{}", record.value());
+		Headers headers = record.headers();
+		Iterator<Header> it = headers.iterator();
+		while (it.hasNext()) {
+			Header one = it.next();
+			log.info("==> header-{}:{}", one.key(), String.valueOf(one.value()));
+		}
+		// 手动提交偏移量
+		ack.acknowledge();
+		log.info("receive a message json end");
 	}
 
 	@Override
