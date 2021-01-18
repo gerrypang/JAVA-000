@@ -60,8 +60,67 @@ spring:
 #      max-wait: -1
 #    # 连接超时时间（毫秒）
 #    timeout: 0
+  kafka:
+    bootstrap-servers:
+    - 192.168.177.156:9092
+    - 192.168.177.156:9093
+    - 192.168.177.156:9094
+    producer:
+      # Kafka 生产者客户端Id,默认为"" 不设置为producer-1,producer-2
+      client-id: order-kafka-producer
+      # 序列化参数
+      # org.apache.kafka.common.serialization.StringSerializer
+      # org.apache.kafka.common.serialization.ByteArraySerializer
+      # org.springframework.kafka.support.serializer.JsonSerializer
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      # 重新尝试次数
+      retries: 0
+      # 压缩格式
+      compression-type: gzip
+      # 批量发送的消息数量
+      batch-size: 16384 
+      # 32M的批处理缓冲区
+      buffer-memory: 33554432 
+       
+    consumer:
+      client-id: order-kafka-consumer
+      group-id: order-kafka-consumer-group
+      # 反序列化参数
+      # org.apache.kafka.common.serialization.StringDeserializer
+      # org.apache.kafka.common.serialization.ByteArrayDeserializer
+      # org.springframework.kafka.support.serializer.JsonDeserializer
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      # 是否自动提交 关闭自动提交位移, 在消息被完整处理之后再手动提交位移.
+      enable-auto-commit: false
+      # 如何设置为自动提交（enable.auto.commit=true），这里设置自动提交周期
+      # auto-commit-interval: 1000
+      # 自动将偏移量置为最早的
+      # earliest: 当各分区下有已提交的offset时，从提交的offset开始消费；无提交的offset时，从头开始消费 
+      # latest: 当各分区下有已提交的offset时，从提交的offset开始消费；无提交的offset时，消费新产生的该分区下的数据 
+      # none: topic各分区都存在已提交的offset时，从offset后开始消费；只要有一个分区不存在已提交的offset，则抛出异常
+      auto-offset-reset: latest
+      max-poll-records: 50
+      properties:
+        # 连接超时时间
+        session-timeout-ms: 20000 
+        # 手动提交设置与poll的心跳数,如果消息队列中没有消息，等待毫秒后，调用poll()方法。如果队列中有消息，立即消费消息，每次消费的消息的多少可以通过max.poll.records配置。
+        max-poll-interval-ms: 15000 
+        # 设置拉取数据的大小 15M
+        max-partition-fetch-bytes: 15728640 
+    listener: 
+      ack-mode: manual
 
 
+
+# 业务中需要操作的主体      
+kafka:
+   topic:
+      order: hello-world-order 
+      
+      
+      
 # mybatis 基本配置
 mybatis:
   # 配置Java类型包名

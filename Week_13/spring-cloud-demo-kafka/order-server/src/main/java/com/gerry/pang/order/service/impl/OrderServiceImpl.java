@@ -6,7 +6,6 @@ import org.dromara.hmily.annotation.HmilyTCC;
 import org.dromara.hmily.common.exception.HmilyRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.gerry.pang.fegin.ProductFeign;
 import com.gerry.pang.fegin.dto.TbProductDTO;
