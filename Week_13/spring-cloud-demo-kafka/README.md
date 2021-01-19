@@ -9,6 +9,7 @@
 - [spring kakfa config](/Week_13/spring-cloud-demo-kafka/order-server/src/main/java/com/gerry/pang/config/KafkaConfig.java)
 - [consumer 实现类](/Week_13/spring-cloud-demo-kafka/order-server/src/main/java/com/gerry/pang/mq/kafka/consumer/ConsumerImpl.java)
 - [producer 实现类](/Week_13/spring-cloud-demo-kafka/order-server/src/main/java/com/gerry/pang/mq/kafka/producer/ProducerImpl.java)
+- [producer 发送单元测试](/Week_13/spring-cloud-demo-kafka/order-server/src/test/java/com/gerry/pang/mq/ProducerKafkaTest.java)
 
 ## （挑战☆☆☆）Kafka 金融领域实战
 
