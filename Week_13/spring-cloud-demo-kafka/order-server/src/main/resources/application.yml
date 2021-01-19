@@ -100,9 +100,11 @@ spring:
       # earliest: 当各分区下有已提交的offset时，从提交的offset开始消费；无提交的offset时，从头开始消费 
       # latest: 当各分区下有已提交的offset时，从提交的offset开始消费；无提交的offset时，消费新产生的该分区下的数据 
       # none: topic各分区都存在已提交的offset时，从offset后开始消费；只要有一个分区不存在已提交的offset，则抛出异常
-      auto-offset-reset: latest
+      auto-offset-reset: earliest
+      # 一个设置批量消费每次最多消费多少条消息记录
       max-poll-records: 50
       properties:
+        
         # 连接超时时间
         session-timeout-ms: 20000 
         # 手动提交设置与poll的心跳数,如果消息队列中没有消息，等待毫秒后，调用poll()方法。如果队列中有消息，立即消费消息，每次消费的消息的多少可以通过max.poll.records配置。
@@ -111,6 +113,13 @@ spring:
         max-partition-fetch-bytes: 15728640 
     listener: 
       ack-mode: manual
+      # 是否开启批量消费，true表示批量消费
+      type: batch
+      # 设置消费的线程数
+      concurrency: 3
+      # 是否开启批量消费，true表示批量消费
+      poll-timeout: 1500
+        
 
 
 
@@ -118,6 +127,7 @@ spring:
 kafka:
    topic:
       order: hello-world-order 
+      batchOrder: batch-order 
       
       
       

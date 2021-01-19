@@ -24,7 +24,6 @@ public class ProducerImpl implements Producer {
 
 	@Autowired
 	private KafkaTopicProperties kafkaTopicProperties;
-	
 	@Autowired
 	private KafkaTemplate<String, String> stringKafkaTemplate;
 	@Autowired
@@ -34,7 +33,7 @@ public class ProducerImpl implements Producer {
 	
 	@Override
 	public void send(Order order) {
-		final ProducerRecord<String, Object> record = createRecord(order);
+		final ProducerRecord<String, Object> record = createRecord(kafkaTopicProperties.getOrder(), order);
 		try {
 			SendResult<String, Object> sendResult = kafkaTemplate.send(record).get(10, TimeUnit.SECONDS);
 			log.info("==> Sent ok: {}", sendResult.getRecordMetadata());
@@ -49,7 +48,7 @@ public class ProducerImpl implements Producer {
 	
 	@Override
 	public void sendAsync(Order order) {
-		final ProducerRecord<String, Object> record = createRecord(order);
+		final ProducerRecord<String, Object> record = createRecord(kafkaTopicProperties.getBatchOrder(), order);
 		ListenableFuture<SendResult<String, Object>> futureOfSend = kafkaTemplate.send(record);
 		futureOfSend.addCallback(new ListenableFutureCallback<SendResult<String, Object>>() {
 			@Override
@@ -64,8 +63,8 @@ public class ProducerImpl implements Producer {
 		});
 	}
 	
-	private ProducerRecord<String, Object> createRecord(Order order) {
-		ProducerRecord<String, Object> record = new ProducerRecord<>(kafkaTopicProperties.getOrder(), order);
+	private ProducerRecord<String, Object> createRecord(String topic, Order order) {
+		ProducerRecord<String, Object> record = new ProducerRecord<>(topic, order);
 		return record;
 	}
 

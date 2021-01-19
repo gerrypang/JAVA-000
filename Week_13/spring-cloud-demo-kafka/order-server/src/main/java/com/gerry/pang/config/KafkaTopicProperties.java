@@ -11,5 +11,7 @@ import lombok.Data;
 public class KafkaTopicProperties {
 	
 	private String order;
+
+	private String batchOrder;
 	
 }

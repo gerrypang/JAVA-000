@@ -1,6 +1,7 @@
 package com.gerry.pang.mq.kafka.consumer;
 
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.header.Header;
@@ -9,8 +10,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Service;
-
-import com.alibaba.fastjson.JSON;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -53,6 +52,29 @@ public class ConsumerImpl implements Consumer {
 		// 手动提交偏移量
 		ack.acknowledge();
 		log.info("receive a message json end");
+	}
+
+	@KafkaListener(topics="${kafka.topic.batchOrder}", clientIdPrefix = "list", containerFactory = "kafkaBatchListenerContainerFactory")
+	public void receiveMessageJSON(List<ConsumerRecord<String, Order>> records, Acknowledgment ack) {
+		log.info("receive batch message json start ");
+		log.info("==> receive batch message size:{}", records.size());
+		try {
+			records.stream().forEach(n -> {
+				log.info("==> receive message:{}", n.value());
+				Headers headers = n.headers();
+				Iterator<Header> it = headers.iterator();
+				while (it.hasNext()) {
+					Header one = it.next();
+					log.info("==> header-{}:{}", one.key(), String.valueOf(one.value()));
+				}
+			});
+		} catch (Exception e) {
+			log.error("批量处理消息异常", e);
+		} finally {
+			// 手动提交偏移量
+			ack.acknowledge();
+		}
+		log.info("receive batch message json end");
 	}
 
 	@Override

@@ -27,14 +27,16 @@ public class KafkaConfig {
 	@Autowired
 	private KafkaProperties kafkaProperties;
 
+	// ====================================== consumer ==============================================
 	// String consumer configuration
 	@Bean
 	public ConcurrentKafkaListenerContainerFactory<String, String> kafkaListenerStringContainerFactory() {
 		ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
 		factory.setConsumerFactory(stringConsumerFactory());
+		// 3个分区
 	    factory.setConcurrency(3);
         factory.getContainerProperties().setPollTimeout(3000);
-        //配置手动提交offset
+        // 配置手动提交offset
         factory.getContainerProperties().setAckMode(AckMode.MANUAL);
 		return factory;
 	}
@@ -66,6 +68,7 @@ public class KafkaConfig {
 		return new DefaultKafkaConsumerFactory<>(kafkaProperties.buildConsumerProperties(), new StringDeserializer(), jsonDeserializer);
 	}
 	
+	
 	// byte array consumer configuration
 	@Bean
 	public ConcurrentKafkaListenerContainerFactory<String, byte[]> kafkaListenerByteArrayContainerFactory() {
@@ -84,6 +87,27 @@ public class KafkaConfig {
 	}
 
 	@Bean
+	public ConcurrentKafkaListenerContainerFactory<String, Object> kafkaBatchListenerContainerFactory() {
+		ConcurrentKafkaListenerContainerFactory<String, Object> factory = new ConcurrentKafkaListenerContainerFactory<>();
+		factory.setConsumerFactory(consumerBatchFactory());
+		factory.setConcurrency(3);
+		factory.setBatchListener(true);
+		factory.getContainerProperties().setPollTimeout(3000);
+		//配置手动提交offset
+		factory.getContainerProperties().setAckMode(AckMode.MANUAL);
+		return factory;
+	}
+	
+	@Bean
+	public ConsumerFactory<String, Object> consumerBatchFactory() {
+		final JsonDeserializer<Object> jsonDeserializer = new JsonDeserializer<>();
+		jsonDeserializer.addTrustedPackages("*");
+		return new DefaultKafkaConsumerFactory<>(kafkaProperties.buildConsumerProperties(), new StringDeserializer(), jsonDeserializer);
+	}
+
+	// ====================================== producer ==============================================
+	// json producer factory
+	@Bean
 	public ProducerFactory<String, Object> producerFactory() {
 		return new DefaultKafkaProducerFactory<>(kafkaProperties.buildProducerProperties(), new StringSerializer(), new JsonSerializer());
 	}
@@ -93,6 +117,8 @@ public class KafkaConfig {
 		return new KafkaTemplate<String, Object>(producerFactory());
 	}
 	
+	
+	// string producer factory
 	@Bean
 	public ProducerFactory<String, String> producerStringFactory() {
 		return new DefaultKafkaProducerFactory<>(kafkaProperties.buildProducerProperties(), new StringSerializer(), new StringSerializer());
@@ -103,6 +129,8 @@ public class KafkaConfig {
 		return new KafkaTemplate<String, String>(producerStringFactory());
 	}
 
+	
+	// byte array producer factory
 	@Bean
 	public ProducerFactory<String, byte[]> producerByteArrayFactory() {
 		return new DefaultKafkaProducerFactory<>(kafkaProperties.buildProducerProperties(), new StringSerializer(), new ByteArraySerializer());

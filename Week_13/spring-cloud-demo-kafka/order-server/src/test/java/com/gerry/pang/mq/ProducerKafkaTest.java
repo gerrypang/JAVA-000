@@ -24,11 +24,13 @@ public class ProducerKafkaTest extends DemoServerApplicationTests {
 	
 	@Test
 	public void testSendAsync() {
-		Order order = new Order();
-		order.setId(1234l);
-		order.setPrice(99.99);
-		order.setSymbol("test send");
-		order.setTs(2l);
-		producer.sendAsync(order);
+		for (long i = 0; i < 10; i++) {
+			Order order = new Order();
+			order.setId(i);
+			order.setPrice(100.00 * i);
+			order.setSymbol("test send " + i);
+			order.setTs(i * 10);
+			producer.sendAsync(order);
+		}
 	}
 }
