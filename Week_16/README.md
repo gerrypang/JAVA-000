@@ -17,7 +17,7 @@
 
 ### 总结
 
-![收获](https://github.com/gerrypang/JAVA-000/blob/main/Week_16/image/收获.png)
+![收获](https://github.com/gerrypang/JAVA-000/blob/main/Week_16/images/收获.png)
 
 #### JVM
 
